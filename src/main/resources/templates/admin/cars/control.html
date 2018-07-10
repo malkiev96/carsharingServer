@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${car.number+' - Панель Управления'}"></title>
+
+    <!-- GLOBAL STYLES -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/theme.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/MoneAdmin.css}" />
+    <link rel="stylesheet" th:href="@{/assets/plugins/Font-Awesome/css/font-awesome.css}" />
+    <!--END GLOBAL STYLES -->
+
+    <!-- PAGE LEVEL STYLES -->
+    <link th:href="@{/assets/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
+    <!-- END PAGE LEVEL  STYLES -->
+</head>
+
+
+<body>
+
+<!-- MAIN WRAPPER -->
+<div id="wrap" >
+
+    <!-- HEADER SECTION -->
+    <div th:replace="/fragments/header.html :: header"></div>
+    <!-- END HEADER SECTION -->
+
+    <div id="left">
+
+        <div class="media user-media well-small">
+            <div class="media-body">
+                <h5 th:text="${username}" class="media-heading"></h5>
+                <ul class="list-unstyled user-info">
+                    <li><a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Администратор</li>
+                </ul>
+            </div>
+        </div>
+
+        <ul id="menu" class="collapse">
+
+            <li style="color: #787878; padding-left: 15px">Автомобили</li>
+
+            <li class="active"><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
+                <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
+
+            <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
+            <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
+            <li><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
+            <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
+            <li style="color: #787878; padding-left: 15px">Клиенты</li>
+
+            <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
+            <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
+        </ul>
+    </div>
+
+
+
+    <!--PAGE CONTENT -->
+    <div id="content">
+
+        <div class="inner">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 th:text="${car.brand+' '+car.model+' '+car.number}"> Автомобили </h3>
+                </div>
+            </div>
+            <hr />
+            <!--MAIN CONTENT -->
+            <div class="row">
+                <div class="col-lg-12">
+
+
+                    <ul class="nav nav-tabs">
+                        <li><a th:href="@{/admin/car/{id}(id=${car.id})}">Данные автомобиля</a></li>
+                        <li class="active"><a href="">Управление</a></li>
+                        <li><a th:href="@{/admin/car/{id}/rent(id=${car.id})}">Аренды</a></li>
+                    </ul>
+
+                    <div class="panel panel-default">
+                        <div th:if="${data==null || !tracker.online}" class="panel-body">
+                            <div class="alert alert-danger" role="alert">
+                                Не удалось синхронизироваться с трекером
+                            </div>
+                        </div>
+                        <div th:if="${data!=null}" class="panel-body">
+                            <h4>Состояние автомобиля</h4>
+                            <dl class="dl-horizontal">
+                                <dt>Связь:</dt>
+                                <dd>
+                                    <span th:if="${tracker.online}" class="label label-success">На связи</span>
+                                    <span th:if="${!tracker.online}" class="label label-danger">Нет связи</span>
+                                </dd>
+                                <dt th:if="${!tracker.online}">Последний сингал:</dt>
+                                <dd th:if="${!tracker.online}">
+                                    <span th:text="${#dates.format(data.timestamp,'HH:mm:ss dd-MM-yyyy')}"></span>
+                                </dd>
+                                <dt>Центральный замок:</dt>
+                                <dd>
+                                    <span th:if="${data.opened}" th:text="Открыт" class="label label-warning"></span>
+                                    <span th:if="${!data.opened}" th:text="Закрыт"></span>
+                                </dd>
+                                <dt>Статус:</dt>
+                                <dd>
+                                    <span th:if="${car.rented}">В аренде</span>
+                                    <span th:if="${!car.rented}">Не в аренде</span>
+                                </dd>
+                                <dt>Зажигание:</dt>
+                                <dd>
+                                    <span th:if="${data.engineOn}" class="label label-warning">Включено</span>
+                                    <span th:if="${!data.engineOn}" class="label label-primary">Выключено</span>
+                                </dd>
+                                <dt>Координаты:</dt>
+                                <dd th:text="${data.lat+', '+data.lon}"></dd>
+                                <dt>Скорость:</dt>
+                                <dd th:if="${data.speed!=-1}" th:text="${data.speed+' км/ч'}"></dd>
+                                <dd th:if="${data.speed==-1}">-</dd>
+                                <dt>Пробег:</dt>
+                                <dd th:if="${data.mileage!=-1}" th:text="${data.mileage+' км'}"></dd>
+                                <dd th:if="${data.mileage==-1}">-</dd>
+                                <dt>Уровень топлива:</dt>
+                                <dd th:if="${data.fuelLevel!=-1}" th:text="${data.fuelLevel+' %'}"></dd>
+                                <dd th:if="${data.fuelLevel==-1}">-</dd>
+                            </dl>
+                            <h4>Управление</h4>
+                            <div th:if="${tracker.action==1}" class="alert alert-danger">Отправлен сигнал на закрытие дверей</div>
+                            <div th:if="${tracker.action==2}" class="alert alert-danger">Отправлен сигнал на открытие дверей</div>
+                            <button class="btn btn-danger"><span class="glyphicon glyphicon-play-circle"></span> Открыть</button>
+                            <button class="btn btn-success"><span class="glyphicon glyphicon-lock"></span> Закрыть</button>
+                            <!--<button class="btn btn-warning"><span class="glyphicon glyphicon-volume-up"></span> Посигналить</button>-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--END MAIN CONTENT -->
+        </div>
+    </div>
+    <!--END PAGE CONTENT -->
+
+</div>
+
+<!--END MAIN WRAPPER -->
+
+<!-- FOOTER -->
+<div id="footer">
+
+</div>
+<!--END FOOTER -->
+
+<!-- GLOBAL SCRIPTS -->
+<script th:src="@{/assets/plugins/jquery-2.0.3.min.js}"></script>
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
+<!-- END GLOBAL SCRIPTS -->
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script th:src="@{/assets/plugins/dataTables/jquery.dataTables.js}"></script>
+<script th:src="@{/assets/plugins/dataTables/dataTables.bootstrap.js}"></script>
+
+
+<!-- END PAGE LEVEL SCRIPTS -->
+
+
+</body>
+
+<!-- END BODY -->
+</html>
+
+

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Аренды - Панель Управления</title>
+
+    <!-- GLOBAL STYLES -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/theme.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/MoneAdmin.css}" />
+    <link rel="stylesheet" th:href="@{/assets/plugins/Font-Awesome/css/font-awesome.css}" />
+    <!--END GLOBAL STYLES -->
+
+    <!-- PAGE LEVEL STYLES -->
+    <link th:href="@{/assets/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
+    <!-- END PAGE LEVEL  STYLES -->
+</head>
+
+
+<body>
+
+<!-- MAIN WRAPPER -->
+<div id="wrap" >
+
+
+    <!-- HEADER SECTION -->
+    <div th:replace="/fragments/header.html :: header"></div>
+    <!-- END HEADER SECTION -->
+
+    <div id="left">
+        <div class="media user-media well-small">
+            <div class="media-body">
+                <h5 th:text="${username}" class="media-heading"></h5>
+                <ul class="list-unstyled user-info">
+                    <li><a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Администратор</li>
+                </ul>
+            </div>
+        </div>
+
+        <ul id="menu" class="collapse">
+
+            <li style="color: #787878; padding-left: 15px">Автомобили</li>
+
+            <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
+                <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
+
+            <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
+            <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
+            <li><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
+            <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
+            <li style="color: #787878; padding-left: 15px">Клиенты</li>
+
+            <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
+            <li class="active"><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
+
+        </ul>
+
+    </div>
+
+    <!--PAGE CONTENT -->
+    <div id="content">
+
+        <div class="inner">
+            <!--MAIN CONTENT -->
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="box">
+                        <header class="panel-heading">Информация об аренде</header>
+
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <dl>
+                                    <div class="col-lg-3">
+                                        <dt>Состояние</dt>
+                                        <dd>
+                                            <span th:if="${order.ended && order.blocked}">Заблокирован</span>
+                                            <span th:if="${order.ended && !order.blocked}">Завершен</span>
+                                            <span th:if="${!order.ended}">Не завершен</span>
+                                        </dd>
+                                        <dt>Начало аренды</dt>
+                                        <dd th:text="${#dates.format(order.start,'dd-MM-yyyy HH:mm:ss')}"></dd>
+                                        <dt>Завершение аренды</dt>
+                                        <dd th:text="${#dates.format(order.end,'dd-MM-yyyy HH:mm:ss')}"></dd>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <dt>Время бронирования</dt>
+                                        <dd th:text="${order.bookingTime}"></dd>
+                                        <dt>Время в движении</dt>
+                                        <dd th:text="${order.rentTime}"></dd>
+                                        <dt>Время парковки</dt>
+                                        <dd th:text="${order.waitingTime}"></dd>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <dt>Автомобиль</dt>
+                                        <dd><a th:href="@{/admin/car/{id}(id=${order.car.id})}" th:text="${order.car.toString()+' '+order.car.number}"></a></dd>
+                                        <dt>Клиент</dt>
+                                        <dd><a th:href="@{/admin/client/{id}(id=${order.client.id})}" th:text="${order.client}"></a></dd>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <dt>Стоимость</dt>
+                                        <dd th:text="${order.price+' &#8381;'}"></dd>
+                                        <dt>Оплата</dt>
+                                        <dd th:switch="${order.payment!=null}">
+                                            <span th:case="true">Оплачено</span>
+                                            <span th:case="false">Не оплчено</span>
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
+
+                            <table class="table table-hover table-sm" id="autoTable">
+                                <a th:if="${!order.ended}" class="btn btn-primary"
+                                   th:href="@{/admin/order/{id}/end(id=${order.id})}" >Завершить аренду</a>
+                                <thead>
+                                <tr>
+                                    <th>Событие</th>
+                                    <th>Начало</th>
+                                    <th>Завершение</th>
+                                    <th>Стоимость</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="d:${data}">
+                                    <td>
+                                    <span th:if="${d.action==1}">Бронирование</span>
+                                    <span th:if="${d.action==2}">Аренда</span>
+                                    <span th:if="${d.action==3}">Ожидание</span>
+                                    <span th:if="${d.action==4}">Завершение</span>
+                                    </td>
+                                    <td th:text="${#dates.format(d.start,'dd-MM-yyyy HH:mm:ss')}"></td>
+                                    <td th:text="${#dates.format(d.end,'dd-MM-yyyy HH:mm:ss')}"></td>
+                                    <td th:text="${d.price+' &#8381;'}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!--END MAIN CONTENT -->
+
+        </div>
+    </div>
+    <!--END PAGE CONTENT -->
+
+</div>
+
+<!--END MAIN WRAPPER -->
+
+<!-- FOOTER -->
+<div id="footer">
+
+</div>
+<!--END FOOTER -->
+
+
+<!-- GLOBAL SCRIPTS -->
+<script th:src="@{/assets/plugins/jquery-2.0.3.min.js}"></script>
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
+<!-- END GLOBAL SCRIPTS -->
+
+
+
+
+
+</body>
+
+<!-- END BODY -->
+</html>
+
+

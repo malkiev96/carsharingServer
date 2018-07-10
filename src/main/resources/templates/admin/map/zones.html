@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Зоны - Панель Управления</title>
+
+    <!-- GLOBAL STYLES -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/theme.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/MoneAdmin.css}" />
+    <link rel="stylesheet" th:href="@{/assets/plugins/Font-Awesome/css/font-awesome.css}" />
+    <!--END GLOBAL STYLES -->
+
+    <!-- PAGE LEVEL STYLES -->
+    <link th:href="@{/assets/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
+    <!-- END PAGE LEVEL  STYLES -->
+</head>
+
+<body>
+
+<!-- MAIN WRAPPER -->
+<div id="wrap" >
+
+    <!-- HEADER SECTION -->
+    <div th:replace="/fragments/header.html :: header"></div>
+    <!-- END HEADER SECTION -->
+
+    <div id="left">
+
+        <div class="media user-media well-small">
+            <div class="media-body">
+                <h5 th:text="${username}" class="media-heading"></h5>
+                <ul class="list-unstyled user-info">
+                    <li><a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Администратор</li>
+                </ul>
+            </div>
+        </div>
+
+        <ul id="menu" class="collapse">
+
+            <li style="color: #787878; padding-left: 15px">Автомобили</li>
+
+            <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
+                <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
+
+            <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
+            <li class="active"><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
+            <li><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
+            <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
+            <li style="color: #787878; padding-left: 15px">Клиенты</li>
+
+            <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
+            <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
+        </ul>
+    </div>
+
+    <!--PAGE CONTENT -->
+    <div id="content">
+        <div class="inner">
+            <!--MAIN CONTENT -->
+            <div class="row">
+                <div class="col-lg-12" style="padding-top: 10px">
+                    <button class="btn btn-primary btn-sm" id="add-driving-polygon">Добавить зону поездок</button>
+                    <button class="btn btn-danger btn-sm" id="add-parking-polygon">Добавить зону завершения аренды</button>
+                    <div class="box">
+                        <div id="map" style="height: 550px;"></div>
+                    </div>
+                </div>
+            </div>
+            <!--END MAIN CONTENT -->
+        </div>
+    </div>
+    <!--END PAGE CONTENT -->
+
+</div>
+
+<!--END MAIN WRAPPER -->
+
+<!-- FOOTER -->
+<div id="footer">
+
+</div>
+<!--END FOOTER -->
+
+
+<!-- GLOBAL SCRIPTS -->
+<script th:src="@{/assets/plugins/jquery-2.0.3.min.js}"></script>
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
+<!-- END GLOBAL SCRIPTS -->
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script th:src="@{/assets/plugins/dataTables/jquery.dataTables.js}"></script>
+<script th:src="@{/assets/plugins/dataTables/dataTables.bootstrap.js}"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+<script>
+    var map;
+    var bounds;
+    var showDriving = true;
+    var showParking = true;
+    var polygons = [];
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: {lat: 56.827221, lng: 60.602424},
+            gestureHandling: 'greedy', //Убрать use ctrl
+            streetViewControl: false,
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.RIGHT_CENTER
+            }
+        });
+
+
+        downloadUrl('/admin/map/api/zones', function (data) {
+            var zones = JSON.parse(data.responseText);
+            for (var i =0; i < zones.length; i++) {
+
+                var id = zones[i]['id'];
+                var type = zones[i]['type'];
+                var coords = JSON.parse(zones[i]['polygon']);
+                var buttonId = polygons.length;
+
+                if (type==1) {//Зона парковки если 1
+
+                    var polygon = new google.maps.Polygon({
+                        id: id,
+                        zoneId: buttonId,
+                        zoneType: type,
+                        paths: coords,
+                        strokeColor: '#e20004',
+                        draggable: false,
+                        editable: false,
+                        strokeOpacity: 0.5,
+                        strokeWeight: 2,
+                        fillColor: '#e20004',
+                        fillOpacity: 0.2
+                    });
+                }else {
+                    //Зона поездок
+
+                    var polygon = new google.maps.Polygon({
+                        id: id,
+                        zoneId: buttonId,
+                        zoneType: type,
+                        paths: coords,
+                        strokeColor: '#0000FF',
+                        draggable: false,
+                        editable: false,
+                        strokeOpacity: 0.5,
+                        strokeWeight: 2,
+                        fillColor: '#0000FF',
+                        fillOpacity: 0.2
+                    });
+                }
+
+                polygons.push(polygon);
+
+                polygon.setMap(map);
+                polygon.addListener('click', showArrays);
+                infoWindow = new google.maps.InfoWindow;
+
+            }
+        });
+
+        google.maps.event.addListener(map, 'bounds_changed', function() {
+            bounds = map.getBounds().getCenter();
+        });
+
+        $('#btn-driving').click(function () {
+            if (showDriving){
+                $(this).text('Показать зоны поездок');
+                showDriving = false;
+                for (var i = 0; i < polygons.length; i++) {
+                    if (polygons[i].zoneType==2){
+                        polygons[i].setMap(null);
+                    }
+                }
+            }else {
+                $(this).text('Скрыть зоны поездок');
+                showDriving = true;
+                for (var i = 0; i < polygons.length; i++) {
+                    if (polygons[i].zoneType==2){
+                        polygons[i].setMap(map);
+                    }
+                }
+            }
+        });
+
+
+        $('#btn-parking').click(function () {
+            if (showParking){
+                $(this).text('Показать зоны парковок');
+                showParking = false;
+                for (var i = 0; i < polygons.length; i++) {
+                    if (polygons[i].zoneType==1){
+                        polygons[i].setMap(null);
+                    }
+                }
+            }else {
+                $(this).text('Скрыть зоны парковок');
+                showParking = true;
+                for (var i = 0; i < polygons.length; i++) {
+                    if (polygons[i].zoneType==1){
+                        polygons[i].setMap(map);
+                    }
+                }
+            }
+        });
+
+        $('#add-parking-polygon').click(function (event) {
+
+            var lat = bounds.lat();
+            var lng = bounds.lng();
+            var coords = [
+                {lat: bounds.lat(), lng: lng},
+                {lat: lat+0.01, lng: lng+0.05},
+                {lat: lat+0.02, lng: lng+0.01}
+            ];
+
+            var buttonId = polygons.length;
+
+            var ParkingPolygon = new google.maps.Polygon({
+                id: 0,
+                zoneId: buttonId,
+                zoneType: 1,
+                paths: coords,
+                strokeColor: '#e20004',
+                draggable: true,
+                editable: true,
+                strokeOpacity: 0.5,
+                strokeWeight: 2,
+                fillColor: '#e20004',
+                fillOpacity: 0.2
+            });
+
+
+            polygons.push(ParkingPolygon);
+
+            ParkingPolygon.setMap(map);
+            ParkingPolygon.addListener('click', showArrays);
+
+            infoWindow = new google.maps.InfoWindow;
+        });
+
+
+        $('#add-driving-polygon').click(function () {
+            var lat = bounds.lat();
+            var lng = bounds.lng();
+            var coords = [
+                {lat: bounds.lat(), lng: lng},
+                {lat: lat+0.01, lng: lng+0.05},
+                {lat: lat+0.02, lng: lng+0.01}
+            ];
+
+            var buttonId = polygons.length;
+
+            var drivingPolygon = new google.maps.Polygon({
+                id: 0,
+                zoneId: buttonId,
+                zoneType: 2,
+                paths: coords,
+                strokeColor: '#0000FF',
+                draggable: true,
+                editable: true,
+                strokeOpacity: 0.5,
+                strokeWeight: 2,
+                fillColor: '#0000FF',
+                fillOpacity: 0.15
+            });
+
+            polygons.push(drivingPolygon);
+
+            drivingPolygon.setMap(map);
+            drivingPolygon.addListener('click', showArrays);
+
+            infoWindow = new google.maps.InfoWindow;
+
+        });
+
+    }
+
+    function showArrays(event) {
+
+        var contentString="";
+        var id = this.zoneId;
+
+        var textInfo;
+        if (this.zoneType==1){
+            textInfo = "Зона завершения аренды";
+        }else {
+            textInfo = "Зона возждения"
+        }
+
+        if (this.editable){
+
+            contentString = '<div style="padding-bottom: 10px"><b>'+textInfo+'</b></div></div>' +
+                '<button id="save-'+id+'" style="margin-right: 5px" class="btn btn-primary btn-xs">Сохранить</button>' +
+                '<button id="delete-'+id+'" class="btn btn-danger btn-xs">Удалить</button></div>';
+
+            infoWindow.setContent(contentString);
+            infoWindow.setPosition(event.latLng);
+            infoWindow.open(map);
+
+            $('#save-'+id).click(function () {
+                for (var i = 0; i < polygons.length; i++) {
+                    if (polygons[i].zoneId===id){
+                        var idDB = polygons[i].id;
+                        var zoneTypeDB = polygons[i].zoneType;
+                        polygons[i].setEditable(false);
+                        polygons[i].setDraggable(false);
+                        var t = polygons[i].getPath();
+                        var pol = "[";
+                        for (var i =0; i < t.getLength(); i++) {
+                            var xy = t.getAt(i);
+                            pol+="{\"lat\":"+xy.lat()+", \"lng\":"+xy.lng()+"},";
+                        }
+                        pol = pol.substring(0,pol.length-1);//удаляем последнуюю запятую
+                        pol+="]";
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/admin/map/api/savePolygon",
+                            data: {
+                                id:idDB,
+                                polygon: pol,
+                                type: zoneTypeDB
+                            },
+                            statusCode: {
+                                200: function() {
+                                    console.log('Зона сохранена');
+                                }
+
+                            }
+                        });
+
+                        break;
+                    }
+                }
+                infoWindow.close();
+            });
+
+            $('#delete-'+id).click(function () {
+                var pol;
+                var drivingZoneCount = 0;
+                for (var i = 0; i < polygons.length; i++) {
+                    if (polygons[i].zoneId===id){
+                        pol = polygons[i];
+                    }
+                    if (polygons[i].zoneType==2){
+                        drivingZoneCount++;
+                    }
+                }
+                var idDB = pol.id;
+                var zoneTypeDB = pol.zoneType;
+                if (zoneTypeDB == 2 && drivingZoneCount<=1){
+                    alert("Нельзя удалить все зоны возждения");
+                }else {
+                    pol.setMap(null);
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/map/api/deleteZone",
+                        data: {
+                            id:idDB
+                        },
+                        statusCode: {
+                            200: function() {
+                                console.log('Зона удалена');
+                            }
+
+                        }
+                    });
+                }
+
+
+                infoWindow.close();
+            });
+
+        }else {
+            contentString = '<div style="padding-bottom: 10px"><b>'+textInfo+'</b></div></div>' +
+                '<button id="edit-'+id+'" style="margin-right: 5px" class="btn btn-primary btn-xs">Редактировать</button></div>';
+
+            infoWindow.setContent(contentString);
+            infoWindow.setPosition(event.latLng);
+            infoWindow.open(map);
+            $('#edit-'+id).click(function () {
+                for (var i = 0; i < polygons.length; i++) {
+                    if (polygons[i].zoneId===id){
+                        polygons[i].setEditable(true);
+                        polygons[i].setDraggable(true);
+                        break;
+                    }
+                }
+
+                infoWindow.close();
+            });
+        }
+    }
+
+
+    function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+            if (request.readyState == 4) {
+                request.onreadystatechange = doNothing;
+                callback(request, request.status);
+            }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+    }
+
+    function doNothing() {}
+</script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_4xDW9DeV1ZyB7FcML-20QyUNlO_Sweo&callback=initMap">
+</script>
+
+
+</body>
+
+<!-- END BODY -->
+</html>
+
+

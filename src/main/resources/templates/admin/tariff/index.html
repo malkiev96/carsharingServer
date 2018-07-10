@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Тарифы - Панель Управления</title>
+
+    <!-- GLOBAL STYLES -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/theme.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/MoneAdmin.css}" />
+    <link rel="stylesheet" th:href="@{/assets/plugins/Font-Awesome/css/font-awesome.css}" />
+    <!--END GLOBAL STYLES -->
+
+    <!-- PAGE LEVEL STYLES -->
+    <link th:href="@{/assets/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
+    <!-- END PAGE LEVEL  STYLES -->
+</head>
+
+
+<body>
+
+<!-- MAIN WRAPPER -->
+<div id="wrap" >
+
+
+    <!-- HEADER SECTION -->
+    <div th:replace="/fragments/header.html :: header"></div>
+    <!-- END HEADER SECTION -->
+
+    <div id="left">
+        <div class="media user-media well-small">
+            <div class="media-body">
+                <h5 th:text="${username}" class="media-heading"></h5>
+                <ul class="list-unstyled user-info">
+                    <li><a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Администратор</li>
+                </ul>
+            </div>
+        </div>
+
+        <ul id="menu" class="collapse">
+
+            <li style="color: #787878; padding-left: 15px">Автомобили</li>
+
+            <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
+                <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
+
+            <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
+            <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
+            <li><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
+            <li class="active"><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
+            <li style="color: #787878; padding-left: 15px">Клиенты</li>
+
+            <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
+            <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
+        </ul>
+    </div>
+
+    <!--PAGE CONTENT -->
+    <div id="content">
+
+        <div class="inner">
+            <!--MAIN CONTENT -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel-body" style="padding-left: 0; padding-bottom: 0">
+                    <a href="" class="btn btn-inverse btn-default"><i class="icon-refresh icon-white"></i> Обновить</a>
+                    <a href="/admin/tariff/new" class="btn btn-primary"><span class="icon-ok"></span> Новый тариф</a>
+                    </div>
+                    <div class="box">
+                        <header class="panel-heading">Тарифы</header>
+                        <div class="panel-body" style="padding: 5px 5px 0">
+
+                            <table class="table table-hover table-sm" id="autoTable">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Название</th>
+                                    <th>Тариф доступен</th>
+                                    <th>Аренда, руб/мин</th>
+                                    <th>Ожидание, руб/мин</th>
+                                    <th>Бронирование бесплатно, мин</th>
+                                    <th>Бронирование, руб/мин</th>
+                                    <th>Максимальная ответственность, руб</th>
+                                    <th>Бесплатное ожидание</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="t: ${tariffs}">
+                                    <td>
+                                        <a th:href="@{/admin/tariff/{id}/edit(id=${t.id})}">
+                                            <button class="btn btn-primary"><i class="icon-edit icon-white"></i></button>
+                                        </a>
+                                    </td>
+                                    <td th:text="${t.name}"></td>
+                                    <td th:switch="${t.enabled}">
+                                        <button th:case="true"  type="button" class="btn btn-success btn-circle"><i class="icon-ok"></i></button>
+                                        <button th:case="false"  type="button" class="btn btn-danger btn-circle"><i class="icon-remove"></i></button>
+                                    </td>
+                                    <td th:text="${t.payRent}"></td>
+                                    <td th:text="${t.payWaiting}"></td>
+                                    <td th:text="${t.freeBookingMin}"></td>
+                                    <td th:text="${t.payBooking}"></td>
+                                    <td th:text="${t.payCrash}"></td>
+                                    <td th:if="${t.freeWaitingStart!=null}" th:text="${t.freeWaitingStart} +' - '+${t.freeWaitingEnd}"></td>
+                                    <td th:if="${t.freeWaitingStart==null}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!--END MAIN CONTENT -->
+
+        </div>
+    </div>
+    <!--END PAGE CONTENT -->
+
+</div>
+
+<!--END MAIN WRAPPER -->
+
+<!-- FOOTER -->
+<div id="footer">
+
+</div>
+<!--END FOOTER -->
+
+
+<!-- GLOBAL SCRIPTS -->
+<script th:src="@{/assets/plugins/jquery-2.0.3.min.js}"></script>
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
+<!-- END GLOBAL SCRIPTS -->
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script th:src="@{/assets/plugins/dataTables/jquery.dataTables.js}"></script>
+<script th:src="@{/assets/plugins/dataTables/dataTables.bootstrap.js}"></script>
+<!--<script>-->
+    <!--$(document).ready(function () {-->
+        <!--$('#autoTable').dataTable();-->
+    <!--});-->
+<!--</script>-->
+
+<!-- END PAGE LEVEL SCRIPTS -->
+
+
+</body>
+
+<!-- END BODY -->
+</html>
+
+

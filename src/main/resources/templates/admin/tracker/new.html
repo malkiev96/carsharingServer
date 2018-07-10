@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Трекеры - Панель Управления</title>
+
+    <!-- GLOBAL STYLES -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/theme.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/MoneAdmin.css}" />
+    <link rel="stylesheet" th:href="@{/assets/plugins/Font-Awesome/css/font-awesome.css}" />
+    <!--END GLOBAL STYLES -->
+
+    <!-- PAGE LEVEL STYLES -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/assets/plugins/switch/static/stylesheets/bootstrap-switch.css" />
+    <!-- END PAGE LEVEL  STYLES -->
+</head>
+
+
+<body>
+
+<!-- MAIN WRAPPER -->
+<div id="wrap" >
+
+    <!-- HEADER SECTION -->
+    <div th:replace="/fragments/header.html :: header"></div>
+    <!-- END HEADER SECTION -->
+
+
+    <div id="left">
+        <div class="media user-media well-small">
+            <div class="media-body">
+                <h5 th:text="${username}" class="media-heading"></h5>
+                <ul class="list-unstyled user-info">
+                    <li><a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Администратор</li>
+                </ul>
+            </div>
+        </div>
+
+        <ul id="menu" class="collapse">
+
+            <li style="color: #787878; padding-left: 15px">Автомобили</li>
+
+            <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
+                <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
+
+            <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
+            <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
+            <li class="active"><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
+            <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
+            <li style="color: #787878; padding-left: 15px">Клиенты</li>
+
+            <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
+            <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
+        </ul>
+    </div>
+    <!--PAGE CONTENT -->
+    <div id="content">
+
+        <div class="inner">
+            <!--MAIN CONTENT -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="box">
+                        <header class="panel-heading">Новый трекер</header>
+                        <div class="panel-body">
+                            <form th:action="@{/admin/tracker/edit}" th:object="${tracker}"
+                                  method="post"
+                                  class="form-horizontal" name="myForm">
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">Название</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" th:field="*{name}" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">IMEI Устройства</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" th:field="*{imei}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">Идентификационный номер</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" th:field="*{identifyNumber}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">Формат передачи данных</label>
+                                    <div class="col-lg-4">
+                                        <select th:field="*{protocol}" class="form-control">
+                                            <option th:value="FLEX">FLEX</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">Номер телефона,№1</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" th:field="*{phoneFirst}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">Номер телефона,№2</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" th:field="*{phoneSecond}" class="form-control">
+                                        <input type="text" hidden th:field="*{id}">
+                                        <input type="text" hidden th:field="*{online}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">Принимать данные?</label>
+                                    <div class="col-lg-4">
+                                        <div class="make-switch switch-small" data-on-label="Да" data-off-label="Нет">
+                                            <input type="checkbox" th:field="*{enabled}" th:value="*{enabled}" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--END MAIN CONTENT -->
+
+
+
+
+        </div>
+    </div>
+    <!--END PAGE CONTENT -->
+
+</div>
+
+<!--END MAIN WRAPPER -->
+
+<!-- FOOTER -->
+<div id="footer">
+
+</div>
+<!--END FOOTER -->
+
+
+<!-- GLOBAL SCRIPTS -->
+<script th:src="@{/assets/plugins/jquery-2.0.3.min.js}"></script>
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
+<!-- END GLOBAL SCRIPTS -->
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script src="/assets/plugins/switch/static/js/bootstrap-switch.min.js"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+
+</body>
+
+<!-- END BODY -->
+</html>
+
+

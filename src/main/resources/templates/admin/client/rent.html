@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Клиенты - Панель Управления</title>
+
+    <!-- GLOBAL STYLES -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/theme.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/MoneAdmin.css}" />
+    <link rel="stylesheet" th:href="@{/assets/plugins/Font-Awesome/css/font-awesome.css}" />
+    <!--END GLOBAL STYLES -->
+
+    <!-- PAGE LEVEL STYLES -->
+    <link href="assets/css/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/plugins/uniform/themes/default/css/uniform.default.css" />
+    <link rel="stylesheet" href="/assets/plugins/daterangepicker/daterangepicker-bs3.css" />
+    <link rel="stylesheet" href="/assets/plugins/datepicker/css/datepicker.css" />
+    <link rel="stylesheet" href="/assets/plugins/timepicker/css/bootstrap-timepicker.min.css" />
+    <!-- END PAGE LEVEL  STYLES -->
+</head>
+
+
+<body>
+
+<!-- MAIN WRAPPER -->
+<div id="wrap" >
+
+    <!-- HEADER SECTION -->
+    <div th:replace="/fragments/header.html :: header"></div>
+    <!-- END HEADER SECTION -->
+
+    <div id="left">
+
+        <div class="media user-media well-small">
+            <div class="media-body">
+                <h5 th:text="${username}" class="media-heading"></h5>
+                <ul class="list-unstyled user-info">
+                    <li><a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Администратор</li>
+                </ul>
+            </div>
+        </div>
+
+        <ul id="menu" class="collapse">
+
+            <li style="color: #787878; padding-left: 15px">Автомобили</li>
+
+            <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
+                <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
+
+            <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
+            <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
+            <li><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
+            <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
+            <li style="color: #787878; padding-left: 15px">Клиенты</li>
+
+            <li class="active"><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
+            <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
+        </ul>
+    </div>
+
+    <!--PAGE CONTENT -->
+    <div id="content">
+
+        <div class="inner">
+            <div class="row">
+                <div class="col-lg-12" style="padding-top: 10px">
+
+                    <a href="" class="btn btn-inverse btn-default"><i class="icon-refresh icon-white"></i> Обновить</a>
+                    <button th:if="${client.enabled}" id="ban" class="btn btn-danger"><i class="glyphicon glyphicon-remove-circle"></i> Заблокировать</button>
+                    <button th:if="${!client.enabled}" id="unban" class="btn btn-warning"><i class="glyphicon glyphicon-ok-circle"></i> Разблокировать</button>
+
+                    <h3 th:if="${client.secondname!=null && client.activated}" th:text="${client}"></h3>
+                    <div th:if="${!client.activated && client.enabled}"
+                         class="alert alert-danger alert-dismissable"
+                         style="margin-top: 10px; margin-bottom: 5px">Необходима проверка документов
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <!--MAIN CONTENT -->
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <ul class="nav nav-tabs">
+                        <li><a th:href="@{/admin/client/{id}(id=${client.id})}">Информация</a></li>
+                        <li><a th:href="@{/admin/client/{id}/valid(id=${client.id})}">Проверка документов</a></li>
+                        <li class="active"><a th:href="@{/admin/client/{id}/rent(id=${client.id})}">Аренды</a></li>
+                    </ul>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--END MAIN CONTENT -->
+        </div>
+    </div>
+    <!--END PAGE CONTENT -->
+
+    <form hidden id="banForm" method="post" th:action="@{/admin/client/{id}/ban(id=${client.id})}"></form>
+    <form hidden id="unbanForm" method="post" th:action="@{/admin/client/{id}/unban(id=${client.id})}"></form>
+</div>
+
+<!--END MAIN WRAPPER -->
+
+<!-- FOOTER -->
+<div id="footer">
+
+</div>
+<!--END FOOTER -->
+
+<!-- GLOBAL SCRIPTS -->
+<script th:src="@{/assets/plugins/jquery-2.0.3.min.js}"></script>
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
+<!-- END GLOBAL SCRIPTS -->
+
+<!-- PAGE LEVEL SCRIPTS -->
+
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/plugins/jasny/js/bootstrap-inputmask.js"></script>
+<script>
+    $("#ban").click(function () {
+        if (confirm("Подтвердите блокировку клиента")){
+            $("#banForm").submit();
+        } else {
+
+        }
+    });
+
+    $("#unban").click(function () {
+        if (confirm("Подтвердите разблокировку клиента")){
+            $("#unbanForm").submit();
+        } else {
+
+        }
+    });
+</script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+
+</body>
+
+<!-- END BODY -->
+</html>
+
+
