@@ -191,9 +191,13 @@ public class ClientController {
             }else if (count==5){
                 file = new File(document.getImageSrc5());
             }
-            InputStream in = new FileInputStream(file);
-            response.setContentType(MediaType.IMAGE_PNG_VALUE);
-            IOUtils.copy(in, response.getOutputStream());
+            InputStream in;
+            if (file != null) {
+                in = new FileInputStream(file);
+                response.setContentType(MediaType.IMAGE_PNG_VALUE);
+                IOUtils.copy(in, response.getOutputStream());
+            }
+
 
         } catch (IOException | EntityNotFoundException e) {
             e.printStackTrace();

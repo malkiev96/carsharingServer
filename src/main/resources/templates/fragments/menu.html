@@ -6,9 +6,7 @@
 </head>
 <body>
 
-
 <div id="left" th:fragment="menu">
-
 
     <div class="media user-media well-small">
         <div class="media-body">
@@ -25,13 +23,11 @@
 
         <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
             <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
-
         <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
         <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
         <li><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
         <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
         <li style="color: #787878; padding-left: 15px">Клиенты</li>
-
         <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
         <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
 
