@@ -6,24 +6,23 @@
     <title th:text="${car.number+' - Панель Управления'}"></title>
 
     <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/assets/plugins/Font-Awesome/css/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/theme.css}" />
+    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
+    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
     <!--END GLOBAL STYLES -->
 
     <!-- PAGE LEVEL STYLES -->
-    <link th:href="@{/assets/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/jquery-ui.css"/>
-    <link rel="stylesheet" href="/assets/plugins/tagsinput/jquery.tagsinput.css" />
-    <link rel="stylesheet" href="/assets/plugins/daterangepicker/daterangepicker-bs3.css" />
-    <link rel="stylesheet" href="/assets/plugins/datepicker/css/datepicker.css" />
-    <link rel="stylesheet" href="/assets/plugins/timepicker/css/bootstrap-timepicker.min.css" />
-    <link rel="stylesheet" href="/assets/plugins/switch/static/stylesheets/bootstrap-switch.css" />
+    <link th:href="@{/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/plugins/tagsinput/jquery.tagsinput.css" />
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker-bs3.css" />
+    <link rel="stylesheet" href="/plugins/datepicker/css/datepicker.css" />
+    <link rel="stylesheet" href="/plugins/timepicker/css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" href="/plugins/switch/static/stylesheets/bootstrap-switch.css" />
     <!-- END PAGE LEVEL  STYLES -->
 </head>
-
 
 <body>
 
@@ -76,17 +75,13 @@
             <!--MAIN CONTENT -->
             <div class="row">
                 <div class="col-lg-12">
-
-
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="">Данные автомобиля</a></li>
                         <li><a th:href="@{/admin/car/{id}/control(id=${car.id})}">Управление</a></li>
                         <li><a th:href="@{/admin/car/{id}/rent(id=${car.id})}">Аренды</a></li>
                     </ul>
-
                     <div class="panel panel-default">
                         <div class="panel-body">
-
                             <form th:action="@{/admin/car/edit}" th:object="${car}" method="post">
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -206,19 +201,19 @@
 <!--END FOOTER -->
 
 <!-- GLOBAL SCRIPTS -->
-<script th:src="@{/assets/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
+<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
+<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
 <!-- END GLOBAL SCRIPTS -->
 
 <!-- PAGE LEVEL SCRIPTS -->
-<script th:src="@{/assets/plugins/dataTables/jquery.dataTables.js}"></script>
-<script th:src="@{/assets/plugins/dataTables/dataTables.bootstrap.js}"></script>
-<script src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
-<script src="/assets/plugins/daterangepicker/moment.min.js"></script>
-<script src="/assets/plugins/datepicker/js/bootstrap-datepicker.js"></script>
-<script src="/assets/plugins/timepicker/js/bootstrap-timepicker.min.js"></script>
-<script src="/assets/plugins/switch/static/js/bootstrap-switch.min.js"></script>
+<script th:src="@{/plugins/dataTables/jquery.dataTables.js}"></script>
+<script th:src="@{/plugins/dataTables/dataTables.bootstrap.js}"></script>
+<script src="/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/plugins/daterangepicker/moment.min.js"></script>
+<script src="/plugins/datepicker/js/bootstrap-datepicker.js"></script>
+<script src="/plugins/timepicker/js/bootstrap-timepicker.min.js"></script>
+<script src="/plugins/switch/static/js/bootstrap-switch.min.js"></script>
 
 <script>
 
