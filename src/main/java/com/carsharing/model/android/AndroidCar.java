@@ -4,7 +4,8 @@ import com.carsharing.model.Tariff;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class AndroidCar {
     private int id;
     private Double lat;

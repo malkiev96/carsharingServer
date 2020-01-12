@@ -4,35 +4,15 @@
 <head>
     <meta charset="UTF-8" />
     <title>Клиенты - Панель Управления</title>
-
-
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
-    <!--END GLOBAL STYLES -->
-
-
-    <!-- PAGE LEVEL STYLES -->
-    <link rel="stylesheet" href="/css/jquery-ui.css" />
-    <link href="/plugins/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css" rel="stylesheet" />
-    <!-- END PAGE LEVEL  STYLES -->
+    <span th:replace="/fragments/head.html :: head"></span>
 </head>
-
 
 <body>
 
-<!-- MAIN WRAPPER -->
 <div id="wrap" >
-
-    <!-- HEADER SECTION -->
     <div th:replace="/fragments/header.html :: header"></div>
-    <!-- END HEADER SECTION -->
 
     <div id="left">
-
         <div class="media user-media well-small">
             <div class="media-body">
                 <h5 th:text="${username}" class="media-heading"></h5>
@@ -59,8 +39,6 @@
             <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
         </ul>
     </div>
-
-    <!--PAGE CONTENT -->
     <div id="content">
 
         <div class="inner">
@@ -190,45 +168,20 @@
                     </div>
                 </div>
             </div>
-            <!--END MAIN CONTENT -->
         </div>
     </div>
-    <!--END PAGE CONTENT -->
 
     <form hidden id="activateForm" method="post" th:action="@{/admin/client/{id}/activate(id=${client.id})}"></form>
     <form hidden id="banForm" method="post" th:action="@{/admin/client/{id}/ban(id=${client.id})}"></form>
     <form hidden id="unbanForm" method="post" th:action="@{/admin/client/{id}/unban(id=${client.id})}"></form>
-
 </div>
 
-<!--END MAIN WRAPPER -->
+<span th:replace="/fragments/scripts.html :: scripts"></span>
 
-<!-- FOOTER -->
-<div id="footer">
-
-</div>
-<!--END FOOTER -->
-
-<!-- GLOBAL SCRIPTS -->
-<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-<!-- END GLOBAL SCRIPTS -->
-
-<!-- PAGE LEVEL SCRIPTS -->
-
-<script src="/plugins/jasny/js/bootstrap-inputmask.js"></script>
 <script>
     $('#birth').datepicker({
         format: 'dd-mm-yyyy'
     });
-</script>
-<script src="/plugins/jquery.fancybox-1.3.4/jquery-1.4.3.min.js"></script> <!--important for gallery-->
-<script src="/plugins/jquery.fancybox-1.3.4/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-<script src="/plugins/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.js"></script>
-
-<script>
-
     $("a#image1").fancybox();
     $("a#image2").fancybox();
     $("a#image3").fancybox();
@@ -279,12 +232,7 @@
         }
     });
 </script>
-<!-- END PAGE LEVEL SCRIPTS -->
-
-
 </body>
-
-<!-- END BODY -->
 </html>
 
 

@@ -3,7 +3,8 @@ package com.carsharing.model.android;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class OrderPay {
 
     private int orderId;

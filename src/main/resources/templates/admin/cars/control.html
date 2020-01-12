@@ -4,32 +4,16 @@
 <head>
     <meta charset="UTF-8" />
     <title th:text="${car.number+' - Панель Управления'}"></title>
-
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
-    <!--END GLOBAL STYLES -->
-
-    <!-- PAGE LEVEL STYLES -->
-    <link th:href="@{/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
-    <!-- END PAGE LEVEL  STYLES -->
+    <span th:replace="/fragments/head.html :: head"></span>
 </head>
-
 
 <body>
 
-<!-- MAIN WRAPPER -->
 <div id="wrap" >
 
-    <!-- HEADER SECTION -->
     <div th:replace="/fragments/header.html :: header"></div>
-    <!-- END HEADER SECTION -->
 
     <div id="left">
-
         <div class="media user-media well-small">
             <div class="media-body">
                 <h5 th:text="${username}" class="media-heading"></h5>
@@ -40,28 +24,20 @@
         </div>
 
         <ul id="menu" class="collapse">
-
             <li style="color: #787878; padding-left: 15px">Автомобили</li>
-
             <li class="active"><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
                 <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
-
             <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
             <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
             <li><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
             <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
             <li style="color: #787878; padding-left: 15px">Клиенты</li>
-
             <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
             <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
         </ul>
     </div>
 
-
-
-    <!--PAGE CONTENT -->
     <div id="content">
-
         <div class="inner">
             <div class="row">
                 <div class="col-lg-12">
@@ -69,17 +45,13 @@
                 </div>
             </div>
             <hr />
-            <!--MAIN CONTENT -->
             <div class="row">
                 <div class="col-lg-12">
-
-
                     <ul class="nav nav-tabs">
                         <li><a th:href="@{/admin/car/{id}(id=${car.id})}">Данные автомобиля</a></li>
                         <li class="active"><a href="">Управление</a></li>
                         <li><a th:href="@{/admin/car/{id}/rent(id=${car.id})}">Аренды</a></li>
                     </ul>
-
                     <div class="panel panel-default">
                         <div th:if="${data==null || !tracker.online}" class="panel-body">
                             <div class="alert alert-danger" role="alert">
@@ -130,44 +102,20 @@
                             <div th:if="${tracker.action==2}" class="alert alert-danger">Отправлен сигнал на открытие дверей</div>
                             <button class="btn btn-danger"><span class="glyphicon glyphicon-play-circle"></span> Открыть</button>
                             <button class="btn btn-success"><span class="glyphicon glyphicon-lock"></span> Закрыть</button>
-                            <!--<button class="btn btn-warning"><span class="glyphicon glyphicon-volume-up"></span> Посигналить</button>-->
 
                         </div>
                     </div>
                 </div>
             </div>
-            <!--END MAIN CONTENT -->
         </div>
     </div>
-    <!--END PAGE CONTENT -->
 
 </div>
 
-<!--END MAIN WRAPPER -->
-
-<!-- FOOTER -->
-<div id="footer">
-
-</div>
-<!--END FOOTER -->
-
-<!-- GLOBAL SCRIPTS -->
-<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-<!-- END GLOBAL SCRIPTS -->
-
-<!-- PAGE LEVEL SCRIPTS -->
-<script th:src="@{/plugins/dataTables/jquery.dataTables.js}"></script>
-<script th:src="@{/plugins/dataTables/dataTables.bootstrap.js}"></script>
-
-
-<!-- END PAGE LEVEL SCRIPTS -->
-
+<span th:replace="/fragments/scripts.html :: scripts"></span>
 
 </body>
 
-<!-- END BODY -->
 </html>
 
 

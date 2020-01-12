@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "zone",schema = "public")
+@Table(name = "zone", schema = "public")
 @Getter
 @Setter
 public class Zone {
@@ -17,10 +17,10 @@ public class Zone {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "polygon",nullable = false)
+    @Column(name = "polygon", nullable = false)
     private String polygon;
 
-    @Column(name = "type",nullable = false)
+    @Column(name = "type", nullable = false)
     private int type;
 
 

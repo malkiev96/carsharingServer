@@ -31,7 +31,7 @@ public class MarkerServiceImpl implements MarkerService {
             Marker marker = new Marker();
 
             marker.setId(car.getId());
-            marker.setName(car.getBrand()+" "+car.getModel());
+            marker.setName(car.getBrand() + " " + car.getModel());
             marker.setVin(car.getVin());
             marker.setNumber(car.getNumber());
             marker.setTransmission(car.getTransmission());
@@ -75,12 +75,12 @@ public class MarkerServiceImpl implements MarkerService {
 
                 TrackerData data = trackerDataService.getLastDataByTracker(tracker);
 
-                if (data!=null){
+                if (data != null) {
 
                     AndroidCar androidCar = new AndroidCar();
 
                     androidCar.setId(car.getId());
-                    androidCar.setName(car.getBrand()+" "+car.getModel());
+                    androidCar.setName(car.getBrand() + " " + car.getModel());
                     androidCar.setNumber(car.getNumber());
                     androidCar.setTransmission(car.getTransmission());
                     androidCar.setYear(car.getYear());

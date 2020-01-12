@@ -51,17 +51,17 @@ public class Client {
     @JsonIgnore
     private String password;
 
-    @Column(name = "activated",columnDefinition = "boolean default false")
+    @Column(name = "activated", columnDefinition = "boolean default false")
     private Boolean activated;
 
-    @Column(name = "enabled",columnDefinition = "boolean default true")
+    @Column(name = "enabled", columnDefinition = "boolean default true")
     private Boolean enabled;
 
     @Column(name = "token")
     private String token;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "client",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "client", fetch = FetchType.EAGER)
     private Document document;
 
     @Override

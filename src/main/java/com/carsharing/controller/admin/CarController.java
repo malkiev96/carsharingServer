@@ -31,17 +31,17 @@ public class CarController {
     }
 
     @ModelAttribute
-    public void carCount(Model model,Principal principal){
-        model.addAttribute("username",principal.getName());
-        model.addAttribute("carOffline",carService.getAllByOnline(false).size());
-        model.addAttribute("clientNew",clientService.getAllByActivatedAndEnabled(false,true).size());
-        model.addAttribute("orderNotPaid",orderService.getAllNotPaid().size());
+    public void carCount(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("carOffline", carService.getAllByOnline(false).size());
+        model.addAttribute("clientNew", clientService.getAllByActivatedAndEnabled(false, true).size());
+        model.addAttribute("orderNotPaid", orderService.getAllNotPaid().size());
     }
 
-    @RequestMapping(value = "/admin/car/{id}/delete",method = RequestMethod.POST)
-    public String deleteCar(@PathVariable("id") int id){
+    @RequestMapping(value = "/admin/car/{id}/delete", method = RequestMethod.POST)
+    public String deleteCar(@PathVariable("id") int id) {
         Car car = carService.getCarById(id);
-        if (car!=null){
+        if (car != null) {
             carService.deleteCar(car);
         }
         return "redirect:/admin/car";
@@ -49,12 +49,12 @@ public class CarController {
 
     @RequestMapping(value = "/admin/car", method = RequestMethod.GET)
     public String carIndex(Model model, @RequestParam(value = "view", required = false) String view) {
-        model.addAttribute("allCount",carService.getAllCars().size());
-        model.addAttribute("enableCount",carService.getAllByEnabled(true).size());
-        model.addAttribute("disableCount",carService.getAllByEnabled(false).size());
-        model.addAttribute("openedCount",carService.getAllByOpened(true).size());
-        model.addAttribute("rentedCount",carService.getAllByRented(true).size());
-        model.addAttribute("offlineCount",carService.getAllByOnline(false).size());
+        model.addAttribute("allCount", carService.getAllCars().size());
+        model.addAttribute("enableCount", carService.getAllByEnabled(true).size());
+        model.addAttribute("disableCount", carService.getAllByEnabled(false).size());
+        model.addAttribute("openedCount", carService.getAllByOpened(true).size());
+        model.addAttribute("rentedCount", carService.getAllByRented(true).size());
+        model.addAttribute("offlineCount", carService.getAllByOnline(false).size());
         if (view == null) {
             model.addAttribute("cars", carService.getAllCars());
             return "admin/cars/index";
@@ -89,8 +89,8 @@ public class CarController {
         Car car = carService.getCarById(id);
         if (car.getNumber() != null) {
             model.addAttribute("car", car);
-            model.addAttribute("tariff",car.getTariff());
-            model.addAttribute("tariffs",tariffService.getAllByEnabled(true));
+            model.addAttribute("tariff", car.getTariff());
+            model.addAttribute("tariffs", tariffService.getAllByEnabled(true));
             model.addAttribute("trackers", trackerService.getEmptyTrackers());
             return "admin/cars/car";
 
@@ -106,7 +106,7 @@ public class CarController {
         if (car.getNumber() != null) {
             model.addAttribute("car", car);
             model.addAttribute("tracker", tracker);
-            model.addAttribute("tariff",car.getTariff());
+            model.addAttribute("tariff", car.getTariff());
             model.addAttribute("data", trackerData);
             model.addAttribute("trackers", trackerService.getEmptyTrackers());
 
@@ -139,7 +139,7 @@ public class CarController {
     public String newCar(Model model) {
         model.addAttribute("car", new Car());
         model.addAttribute("trackers", trackerService.getEmptyTrackers());
-        model.addAttribute("tariffs",tariffService.getAllByEnabled(true));
+        model.addAttribute("tariffs", tariffService.getAllByEnabled(true));
 
         return "admin/cars/new";
     }

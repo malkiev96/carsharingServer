@@ -46,10 +46,10 @@ public class Order {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderData> orderData;
 
-    @OneToOne(mappedBy = "order",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER)
     private Payment payment;
 
 

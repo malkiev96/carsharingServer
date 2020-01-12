@@ -17,43 +17,53 @@ public class Tracker {
     @Getter
     private int id;
 
-    @Column(name = "name", nullable = false)@Getter
+    @Column(name = "name", nullable = false)
+    @Getter
     @Setter
     private String name;
 
-    @Column(name = "phonefirst", nullable = false)@Getter
+    @Column(name = "phonefirst", nullable = false)
+    @Getter
     @Setter
     private String phoneFirst;
 
-    @Column(name = "phonesecond")@Getter
+    @Column(name = "phonesecond")
+    @Getter
     @Setter
     private String phoneSecond;
 
-    @Column(name = "enabled",columnDefinition = "boolean default true")@Getter
+    @Column(name = "enabled", columnDefinition = "boolean default true")
+    @Getter
     @Setter
     private Boolean enabled;
 
-    @Column(name = "online",columnDefinition = "boolean default false")@Getter
+    @Column(name = "online", columnDefinition = "boolean default false")
+    @Getter
     @Setter
     private Boolean online;
 
-    @Column(name = "imei", nullable = false)@Getter
+    @Column(name = "imei", nullable = false)
+    @Getter
     @Setter
     private String imei;
 
-    @Column(name = "protocol",nullable = false)@Getter
+    @Column(name = "protocol", nullable = false)
+    @Getter
     @Setter
     private String protocol;
 
-    @Column(name = "identify_number",nullable = false)@Getter
+    @Column(name = "identify_number", nullable = false)
+    @Getter
     @Setter
     private String identifyNumber;
 
-    @Column(name = "action",columnDefinition = "default 0")@Getter
+    @Column(name = "action", columnDefinition = "default 0")
+    @Getter
     @Setter
     private int action;
 
-    @OneToOne(mappedBy = "tracker",fetch = FetchType.LAZY)@Getter
+    @OneToOne(mappedBy = "tracker", fetch = FetchType.LAZY)
+    @Getter
     @Setter
     private Car car;
 

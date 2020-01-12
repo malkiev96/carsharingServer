@@ -16,10 +16,10 @@ import java.security.Principal;
 @Controller
 public class TrackerController {
 
-    private TrackerService trackerService;
     private final CarService carService;
     private final ClientService clientService;
     private final OrderService orderService;
+    private TrackerService trackerService;
 
     public TrackerController(TrackerService trackerService, CarService carService, ClientService clientService, OrderService orderService) {
         this.trackerService = trackerService;
@@ -29,29 +29,29 @@ public class TrackerController {
     }
 
     @ModelAttribute
-    public void carCount(Model model,Principal principal){
-        model.addAttribute("username",principal.getName());
-        model.addAttribute("carOffline",carService.getAllByOnline(false).size());
-        model.addAttribute("clientNew",clientService.getAllByActivatedAndEnabled(false,true).size());
-        model.addAttribute("orderNotPaid",orderService.getAllNotPaid().size());
+    public void carCount(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("carOffline", carService.getAllByOnline(false).size());
+        model.addAttribute("clientNew", clientService.getAllByActivatedAndEnabled(false, true).size());
+        model.addAttribute("orderNotPaid", orderService.getAllNotPaid().size());
     }
 
     @RequestMapping(value = "/admin/tracker", method = RequestMethod.GET)
-    public String index(Model model, @RequestParam(value = "v",required = false) String v) {
+    public String index(Model model, @RequestParam(value = "v", required = false) String v) {
         trackerService.testAllOnline();
 
-        model.addAttribute("allCount",trackerService.getAll().size());
-        model.addAttribute("enableCount",trackerService.getAllByEnabled(true).size());
-        model.addAttribute("disableCount",trackerService.getAllByEnabled(false).size());
-        model.addAttribute("onlineCount",trackerService.getAllByOnline(true).size());
-        model.addAttribute("offlineCount",trackerService.getAllByOnline(false).size());
-        model.addAttribute("emptyCount",trackerService.getEmptyTrackers().size());
+        model.addAttribute("allCount", trackerService.getAll().size());
+        model.addAttribute("enableCount", trackerService.getAllByEnabled(true).size());
+        model.addAttribute("disableCount", trackerService.getAllByEnabled(false).size());
+        model.addAttribute("onlineCount", trackerService.getAllByOnline(true).size());
+        model.addAttribute("offlineCount", trackerService.getAllByOnline(false).size());
+        model.addAttribute("emptyCount", trackerService.getEmptyTrackers().size());
 
         if (v == null) {
             model.addAttribute("trackers", trackerService.getAll());
 
-        }else {
-            switch (v){
+        } else {
+            switch (v) {
                 case "all":
                     model.addAttribute("trackers", trackerService.getAll());
                     break;
@@ -62,13 +62,13 @@ public class TrackerController {
                     model.addAttribute("trackers", trackerService.getAllByEnabled(false));
                     break;
                 case "online":
-                    model.addAttribute("trackers",trackerService.getAllByOnline(true));
+                    model.addAttribute("trackers", trackerService.getAllByOnline(true));
                     break;
                 case "offline":
                     model.addAttribute("trackers", trackerService.getAllByOnline(false));
                     break;
                 case "empty":
-                    model.addAttribute("trackers",trackerService.getEmptyTrackers());
+                    model.addAttribute("trackers", trackerService.getEmptyTrackers());
                     break;
             }
         }
@@ -76,10 +76,10 @@ public class TrackerController {
         return "admin/tracker/index";
     }
 
-    @RequestMapping(value = "/admin/tracker/{id}/delete",method = RequestMethod.POST)
-    public String deleteTracker(@PathVariable("id") int id){
+    @RequestMapping(value = "/admin/tracker/{id}/delete", method = RequestMethod.POST)
+    public String deleteTracker(@PathVariable("id") int id) {
         Tracker tracker = trackerService.getById(id);
-        if (tracker != null){
+        if (tracker != null) {
             trackerService.delete(tracker);
         }
         return "redirect:/admin/tracker";

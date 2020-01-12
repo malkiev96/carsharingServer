@@ -4,17 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Карта - Панель Управления</title>
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
-    <!--END GLOBAL STYLES -->
-
-    <!-- PAGE LEVEL STYLES -->
-    <link th:href="@{/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
-    <!-- END PAGE LEVEL  STYLES -->
+    <span th:replace="/fragments/head.html :: head"></span>
 </head>
 
 <body>
@@ -74,29 +64,8 @@
     <!--END PAGE CONTENT -->
 
 </div>
-
-<!--END MAIN WRAPPER -->
-
-<!-- FOOTER -->
-<div id="footer">
-
-</div>
-<!--END FOOTER -->
-
-
-<!-- GLOBAL SCRIPTS -->
-<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-<!-- END GLOBAL SCRIPTS -->
-
-<!-- PAGE LEVEL SCRIPTS -->
-<script th:src="@{/plugins/dataTables/jquery.dataTables.js}"></script>
-<script th:src="@{/plugins/dataTables/dataTables.bootstrap.js}"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
-
+<span th:replace="/fragments/scripts.html :: scripts"></span>
 <script>
-
     var map;
     var markers =[];
     var imageDanger = '/img/dangerMarker.png';
@@ -120,29 +89,21 @@
             }
         });
 
-
         downloadUrl('/admin/map/api/marker', function (data) {
             var text = JSON.parse(data.responseText);
             var array = text.markerList;
-
             markers = [];
-
             var infoWindow = new google.maps.InfoWindow;
-
             array.map(function (item) {
-
                 var lat = item['lat'];
                 var lon = item['lon'];
-
                 var point = new google.maps.LatLng(
                     parseFloat(lat),
                     parseFloat(lon)
                 );
-
                 var online = item['online'];
                 var enabled = item['enabled'];
                 var rented = item['rented'];
-
                 if (online && enabled && !rented){
                     imageIcon = imagePrimary;
                 }else if (online && enabled && rented){
@@ -152,35 +113,27 @@
                 }else {
                     imageIcon = imageDanger;
                 }
-
                 var marker = new google.maps.Marker({
                     map: map,
                     position: point,
                     icon: imageIcon
                 });
-
                 marker.addListener('click', function() {
                     infoWindow.setContent(createInfoWindow(item));
                     infoWindow.open(map, marker);
                 });
-
                 markers.push(marker);
-
             });
-
         });
 
         downloadUrl('/admin/map/api/zones', function (data) {
             var zones = JSON.parse(data.responseText);
             for (var i =0; i < zones.length; i++) {
-
                 var id = zones[i]['id'];
                 var type = zones[i]['type'];
                 var coords = JSON.parse(zones[i]['polygon']);
                 var buttonId = polygons.length;
-
                 if (type==1) {//Зона парковки если 1
-
                     var polygon = new google.maps.Polygon({
                         id: id,
                         zoneId: buttonId,
@@ -196,7 +149,6 @@
                     });
                 }else {
                     //Зона поездок
-
                     var polygon = new google.maps.Polygon({
                         id: id,
                         zoneId: buttonId,
@@ -211,13 +163,10 @@
                         fillOpacity: 0.15
                     });
                 }
-
                 polygons.push(polygon);
-
                 polygon.setMap(map);
             }
         });
-
 
         $('#btn-driving').click(function () {
             if (showDriving){
@@ -239,7 +188,6 @@
             }
         });
 
-
         $('#btn-parking').click(function () {
             if (showParking){
                 $(this).text('Показать зоны парковок');
@@ -260,28 +208,23 @@
             }
         });
 
-
         setInterval(function () {
             downloadUrl('/admin/map/api/marker', function (data) {
                 var text = JSON.parse(data.responseText);
                 var array = text.markerList;
-
                 for (i in array){
                     var id = array[i]['id'];
                     var speed = array[i]['speed'];
                     var lat = array[i]['lat'];
                     var lon = array[i]['lon'];
-
                     var point = new google.maps.LatLng(
                         parseFloat(lat),
                         parseFloat(lon)
                     );
                     markers[i].setPosition(point);
-
                     var online = array[i]['online'];
                     var enabled = array[i]['enabled'];
                     var rented = array[i]['rented'];
-
                     if (online && enabled && !rented){
                         markers[i].setIcon(imagePrimary);
                     }else if (online && enabled && rented){
@@ -291,16 +234,11 @@
                     }else {
                         markers[i].setIcon(imageDanger);
                     }
-
                     $('#info-'+id).replaceWith(createInfoWindow(array[i]));
-
                 }
-
-
             });
         },1000);
     }
-
 
     function createInfoWindow(item) {
         var window;
@@ -309,7 +247,6 @@
         var number = item['number'];
         var transmission = item['transmission'];
         var year = item['year'];
-        // var vin = item['vin'];
         var online = item['online'];
         var enabled = item['enabled'];
         var rented = item['rented'];
@@ -324,7 +261,6 @@
             lat = lat.toString().substr(0, 9);
             lon = lon.toString().substr(0, 9);
         }
-
 
         var date = new Date(lastTime);
         lastTime = date.toTimeString().substr(0, 8);
@@ -378,7 +314,6 @@
                 callback(request, request.status);
             }
         };
-
         request.open('GET', url, true);
         request.send(null);
     }
@@ -390,10 +325,7 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_4xDW9DeV1ZyB7FcML-20QyUNlO_Sweo&callback=initMap">
 </script>
 
-
 </body>
-
-<!-- END BODY -->
 </html>
 
 

@@ -1,9 +1,7 @@
 package com.carsharing.service.polygon;
 
-public class CDeterminant
-{
-    public static boolean determine(final CPoints points, double x, double y)
-    {
+public class CDeterminant {
+    public static boolean determine(final CPoints points, double x, double y) {
 
         boolean result = false;
         int count = points.count();
@@ -11,13 +9,11 @@ public class CDeterminant
         double[] yp = points.getYArray();
 
 
-        for (int i = 0, j = count - 1; i < count; j = i++)
-        {
-            if(xp[j] == xp[i] || yp[j] == yp[i]) // Деление на ноль.
+        for (int i = 0, j = count - 1; i < count; j = i++) {
+            if (xp[j] == xp[i] || yp[j] == yp[i]) // Деление на ноль.
                 continue;
 
-            if(((yp[i] <= y && y < yp[j]) || (yp[j] <= y && y < yp[i])))
-            {
+            if (((yp[i] <= y && y < yp[j]) || (yp[j] <= y && y < yp[i]))) {
                 double x1 = xp[i];
                 double y1 = yp[i];
                 double x2 = xp[j];
@@ -27,7 +23,7 @@ public class CDeterminant
                 double b = y1 - k * x1;
                 double cross_x = (y - b) / k;
 
-                if((float)x > cross_x)
+                if ((float) x > cross_x)
                     result = !result;
             }
         }

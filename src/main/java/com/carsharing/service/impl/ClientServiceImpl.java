@@ -39,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     public List<Client> getAllByActivatedAndEnabled(boolean activated, boolean enabled) {
-        return clientRepository.getAllByActivatedAndEnabled(activated,enabled);
+        return clientRepository.getAllByActivatedAndEnabled(activated, enabled);
     }
 
     public Client getByMail(String mail) {
@@ -58,39 +58,39 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.save(client);
     }
 
-    public boolean tokenAuthentication(Token token){
+    public boolean tokenAuthentication(Token token) {
         Client client = getById(token.getId());
-        if (client!=null) return client.getToken().equals(token.getToken());
+        if (client != null) return client.getToken().equals(token.getToken());
         return false;
     }
 
     public String generateToken() {
         SecureRandom secureRandom = new SecureRandom();
-        long longToken = Math.abs( secureRandom.nextLong() );
-        String random = Long.toString( longToken, 16 );
+        long longToken = Math.abs(secureRandom.nextLong());
+        String random = Long.toString(longToken, 16);
         return random;
     }
 
     public Client login(LogPass logPass) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Client client = clientRepository.getClientByTelephone(logPass.getLogin());
-        if (client != null && passwordEncoder.matches(logPass.getPassword(),client.getPassword())) {
+        if (client != null && passwordEncoder.matches(logPass.getPassword(), client.getPassword())) {
             return client;
         } else return null;
     }
 
-    public String saveImage(BufferedImage image,int clientId, String fileName) {
+    public String saveImage(BufferedImage image, int clientId, String fileName) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
-        String path = "C:/carsharing/client/"+clientId;
+        String path = "C:/carsharing/client/" + clientId;
 
         File dir = new File(path);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File file = new File(path+"/"+fileName);
+        File file = new File(path + "/" + fileName);
         try {
-            ImageIO.write(image,"png",file);
+            ImageIO.write(image, "png", file);
             return file.getAbsolutePath();
         } catch (IOException e) {
             e.printStackTrace();

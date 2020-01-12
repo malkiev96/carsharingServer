@@ -36,8 +36,8 @@ public class MapApiController {
         }
      */
 
-    @RequestMapping(value = "/api/zones",method = RequestMethod.GET)
-    public List<Zone> getZones(){
+    @RequestMapping(value = "/api/zones", method = RequestMethod.GET)
+    public List<Zone> getZones() {
         return zoneRepository.findAll();
     }
 }

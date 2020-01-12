@@ -24,7 +24,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     Date getCurrentDate();
 
     List<Order> findAllByPaymentIsNull();
+
     List<Order> findAllByPaymentIsNullAndEnded(boolean ended);
+
     List<Order> findAllByPaymentIsNotNull();
+
     Order findByPaymentIsNullAndClientAndEndedIsTrue(Client client);
 }

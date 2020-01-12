@@ -39,7 +39,8 @@ public class SignApiController {
     }
 
     @PostMapping("api/client/token")
-    public @ResponseBody Client token(@RequestBody Token token, HttpServletResponse response) {
+    public @ResponseBody
+    Client token(@RequestBody Token token, HttpServletResponse response) {
         try {
             Client client = clientService.getById(token.getId());
             if (client != null && client.getToken().equals(token.getToken())) {
@@ -49,15 +50,16 @@ public class SignApiController {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
                 return null;
             }
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
         }
         return null;
     }
 
     @PostMapping("/api/client/registration")
-    public @ResponseBody Client regClient(@RequestBody ClientReg clientReg, HttpServletResponse response){
+    public @ResponseBody
+    Client regClient(@RequestBody ClientReg clientReg, HttpServletResponse response) {
 
-        if (clientReg!=null) {
+        if (clientReg != null) {
             if (Pattern.checkTelNumber(clientReg.getTelephone()) &&
                     Pattern.checkMail(clientReg.getMail()) &&
                     Pattern.checkPassword(clientReg.getPassword())) {
@@ -88,11 +90,11 @@ public class SignApiController {
                         BufferedImage image5 = ImageIO.read(new ByteArrayInputStream(decodeBase64(clientReg.getImageByte5())));
 
                         Document document = new Document();
-                        document.setImageSrc1(clientService.saveImage(image1,client.getId(),"Photo1.png"));
-                        document.setImageSrc2(clientService.saveImage(image2,client.getId(),"Photo2.png"));
-                        document.setImageSrc3(clientService.saveImage(image3,client.getId(),"Photo3.png"));
-                        document.setImageSrc4(clientService.saveImage(image4,client.getId(),"Photo4.png"));
-                        document.setImageSrc5(clientService.saveImage(image5,client.getId(),"Photo5.png"));
+                        document.setImageSrc1(clientService.saveImage(image1, client.getId(), "Photo1.png"));
+                        document.setImageSrc2(clientService.saveImage(image2, client.getId(), "Photo2.png"));
+                        document.setImageSrc3(clientService.saveImage(image3, client.getId(), "Photo3.png"));
+                        document.setImageSrc4(clientService.saveImage(image4, client.getId(), "Photo4.png"));
+                        document.setImageSrc5(clientService.saveImage(image5, client.getId(), "Photo5.png"));
                         document.setClient(client);
 
                         documentService.save(document);
@@ -111,9 +113,10 @@ public class SignApiController {
     }
 
     @PostMapping("/api/client/valid")
-    public @ResponseBody String validClient(@RequestBody ClientReg clientReg,HttpServletResponse response){
+    public @ResponseBody
+    String validClient(@RequestBody ClientReg clientReg, HttpServletResponse response) {
 
-        if (clientReg!=null) {
+        if (clientReg != null) {
             if (Pattern.checkTelNumber(clientReg.getTelephone()) &&
                     Pattern.checkMail(clientReg.getMail()) &&
                     Pattern.checkPassword(clientReg.getPassword())) {

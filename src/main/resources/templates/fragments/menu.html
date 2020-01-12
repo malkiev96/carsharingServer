@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-
-<div id="left" th:fragment="menu">
-
+<div id="left" th:fragment="menu" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="media user-media well-small">
         <div class="media-body">
             <h5 th:text="${username}" class="media-heading"></h5>
@@ -16,11 +7,8 @@
             </ul>
         </div>
     </div>
-
     <ul id="menu" class="collapse">
-
         <li style="color: #787878; padding-left: 15px">Автомобили</li>
-
         <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
             <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
         <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
@@ -30,10 +18,5 @@
         <li style="color: #787878; padding-left: 15px">Клиенты</li>
         <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
         <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
-
     </ul>
-
 </div>
-
-</body>
-</html>

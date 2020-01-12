@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 
 public class Pattern {
 
-    public static boolean checkPassword(String testString){
+    public static boolean checkPassword(String testString) {
         java.util.regex.Pattern p = java.util.regex.Pattern.compile("^(?=.*[a-z])[a-zA-Z\\d]{6,25}$");
         Matcher m = p.matcher(testString);
         return m.matches();

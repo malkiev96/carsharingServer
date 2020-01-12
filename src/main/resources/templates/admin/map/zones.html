@@ -4,31 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <title>Зоны - Панель Управления</title>
-
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
-    <!--END GLOBAL STYLES -->
-
-    <!-- PAGE LEVEL STYLES -->
-    <link th:href="@{/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
-    <!-- END PAGE LEVEL  STYLES -->
+    <span th:replace="/fragments/head.html :: head"></span>
 </head>
 
 <body>
-
-<!-- MAIN WRAPPER -->
 <div id="wrap" >
-
-    <!-- HEADER SECTION -->
     <div th:replace="/fragments/header.html :: header"></div>
-    <!-- END HEADER SECTION -->
-
     <div id="left">
-
         <div class="media user-media well-small">
             <div class="media-body">
                 <h5 th:text="${username}" class="media-heading"></h5>
@@ -39,9 +21,7 @@
         </div>
 
         <ul id="menu" class="collapse">
-
             <li style="color: #787878; padding-left: 15px">Автомобили</li>
-
             <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
                 <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
 
@@ -55,11 +35,8 @@
             <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
         </ul>
     </div>
-
-    <!--PAGE CONTENT -->
     <div id="content">
         <div class="inner">
-            <!--MAIN CONTENT -->
             <div class="row">
                 <div class="col-lg-12" style="padding-top: 10px">
                     <button class="btn btn-primary btn-sm" id="add-driving-polygon">Добавить зону поездок</button>
@@ -69,32 +46,11 @@
                     </div>
                 </div>
             </div>
-            <!--END MAIN CONTENT -->
         </div>
     </div>
-    <!--END PAGE CONTENT -->
-
 </div>
 
-<!--END MAIN WRAPPER -->
-
-<!-- FOOTER -->
-<div id="footer">
-
-</div>
-<!--END FOOTER -->
-
-
-<!-- GLOBAL SCRIPTS -->
-<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-<!-- END GLOBAL SCRIPTS -->
-
-<!-- PAGE LEVEL SCRIPTS -->
-<script th:src="@{/plugins/dataTables/jquery.dataTables.js}"></script>
-<script th:src="@{/plugins/dataTables/dataTables.bootstrap.js}"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
+<span th:replace="/fragments/scripts.html :: scripts"></span>
 
 <script>
     var map;
@@ -115,7 +71,6 @@
             }
         });
 
-
         downloadUrl('/admin/map/api/zones', function (data) {
             var zones = JSON.parse(data.responseText);
             for (var i =0; i < zones.length; i++) {
@@ -124,9 +79,7 @@
                 var type = zones[i]['type'];
                 var coords = JSON.parse(zones[i]['polygon']);
                 var buttonId = polygons.length;
-
                 if (type==1) {//Зона парковки если 1
-
                     var polygon = new google.maps.Polygon({
                         id: id,
                         zoneId: buttonId,
@@ -142,7 +95,6 @@
                     });
                 }else {
                     //Зона поездок
-
                     var polygon = new google.maps.Polygon({
                         id: id,
                         zoneId: buttonId,
@@ -157,20 +109,16 @@
                         fillOpacity: 0.2
                     });
                 }
-
                 polygons.push(polygon);
-
                 polygon.setMap(map);
                 polygon.addListener('click', showArrays);
                 infoWindow = new google.maps.InfoWindow;
 
             }
         });
-
         google.maps.event.addListener(map, 'bounds_changed', function() {
             bounds = map.getBounds().getCenter();
         });
-
         $('#btn-driving').click(function () {
             if (showDriving){
                 $(this).text('Показать зоны поездок');
@@ -190,7 +138,6 @@
                 }
             }
         });
-
 
         $('#btn-parking').click(function () {
             if (showParking){
@@ -213,7 +160,6 @@
         });
 
         $('#add-parking-polygon').click(function (event) {
-
             var lat = bounds.lat();
             var lng = bounds.lng();
             var coords = [
@@ -221,9 +167,7 @@
                 {lat: lat+0.01, lng: lng+0.05},
                 {lat: lat+0.02, lng: lng+0.01}
             ];
-
             var buttonId = polygons.length;
-
             var ParkingPolygon = new google.maps.Polygon({
                 id: 0,
                 zoneId: buttonId,
@@ -238,15 +182,11 @@
                 fillOpacity: 0.2
             });
 
-
             polygons.push(ParkingPolygon);
-
             ParkingPolygon.setMap(map);
             ParkingPolygon.addListener('click', showArrays);
-
             infoWindow = new google.maps.InfoWindow;
         });
-
 
         $('#add-driving-polygon').click(function () {
             var lat = bounds.lat();
@@ -256,9 +196,7 @@
                 {lat: lat+0.01, lng: lng+0.05},
                 {lat: lat+0.02, lng: lng+0.01}
             ];
-
             var buttonId = polygons.length;
-
             var drivingPolygon = new google.maps.Polygon({
                 id: 0,
                 zoneId: buttonId,
@@ -272,40 +210,29 @@
                 fillColor: '#0000FF',
                 fillOpacity: 0.15
             });
-
             polygons.push(drivingPolygon);
-
             drivingPolygon.setMap(map);
             drivingPolygon.addListener('click', showArrays);
-
             infoWindow = new google.maps.InfoWindow;
-
         });
-
     }
 
     function showArrays(event) {
-
         var contentString="";
         var id = this.zoneId;
-
         var textInfo;
         if (this.zoneType==1){
             textInfo = "Зона завершения аренды";
         }else {
             textInfo = "Зона возждения"
         }
-
         if (this.editable){
-
             contentString = '<div style="padding-bottom: 10px"><b>'+textInfo+'</b></div></div>' +
                 '<button id="save-'+id+'" style="margin-right: 5px" class="btn btn-primary btn-xs">Сохранить</button>' +
                 '<button id="delete-'+id+'" class="btn btn-danger btn-xs">Удалить</button></div>';
-
             infoWindow.setContent(contentString);
             infoWindow.setPosition(event.latLng);
             infoWindow.open(map);
-
             $('#save-'+id).click(function () {
                 for (var i = 0; i < polygons.length; i++) {
                     if (polygons[i].zoneId===id){
@@ -334,7 +261,6 @@
                                 200: function() {
                                     console.log('Зона сохранена');
                                 }
-
                             }
                         });
 
@@ -371,15 +297,11 @@
                             200: function() {
                                 console.log('Зона удалена');
                             }
-
                         }
                     });
                 }
-
-
                 infoWindow.close();
             });
-
         }else {
             contentString = '<div style="padding-bottom: 10px"><b>'+textInfo+'</b></div></div>' +
                 '<button id="edit-'+id+'" style="margin-right: 5px" class="btn btn-primary btn-xs">Редактировать</button></div>';
@@ -395,25 +317,20 @@
                         break;
                     }
                 }
-
                 infoWindow.close();
             });
         }
     }
-
-
     function downloadUrl(url, callback) {
         var request = window.ActiveXObject ?
             new ActiveXObject('Microsoft.XMLHTTP') :
             new XMLHttpRequest;
-
         request.onreadystatechange = function() {
             if (request.readyState == 4) {
                 request.onreadystatechange = doNothing;
                 callback(request, request.status);
             }
         };
-
         request.open('GET', url, true);
         request.send(null);
     }
@@ -425,10 +342,7 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_4xDW9DeV1ZyB7FcML-20QyUNlO_Sweo&callback=initMap">
 </script>
 
-
 </body>
-
-<!-- END BODY -->
 </html>
 
 

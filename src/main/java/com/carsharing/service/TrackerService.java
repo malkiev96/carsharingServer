@@ -23,6 +23,7 @@ public interface TrackerService {
     Tracker getTrackerByImei(String imei);
 
     List<Tracker> getAllByEnabled(boolean enabled);
+
     List<Tracker> getAllByOnline(boolean online);
 
     List<Tracker> getAll();

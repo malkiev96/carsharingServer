@@ -39,28 +39,30 @@ public class OrderApiController {
     @GetMapping("api/car/{id}")
     public AndroidCar getCarById(@PathVariable("id") int id) {
         return carService.getAndroidCarById(id);
-        }
+    }
 
     @PostMapping("api/order/test")
-    public @ResponseBody AndroidCar testBooking(@RequestParam("client_id") int client_id,
-                              @RequestParam("car_number") String car_number,
-                              HttpServletResponse response){
-        if (orderService.testBooking(client_id,car_number)){
+    public @ResponseBody
+    AndroidCar testBooking(@RequestParam("client_id") int client_id,
+                           @RequestParam("car_number") String car_number,
+                           HttpServletResponse response) {
+        if (orderService.testBooking(client_id, car_number)) {
             response.setStatus(200);
             Car car = carService.getCarByNumber(car_number);
 
             return carService.getAndroidCarById(car.getId());
-        }else {
+        } else {
             response.setStatus(400);
             return null;
         }
     }
 
     @PostMapping("api/order/actual")
-    public @ResponseBody AndroidOrder getActual(@RequestParam("client_id") int clientId, HttpServletResponse response){
+    public @ResponseBody
+    AndroidOrder getActual(@RequestParam("client_id") int clientId, HttpServletResponse response) {
         AndroidOrder order = orderService.getActual(clientId);
-        System.out.println("Инфо"+order);
-        if (order!=null){
+        System.out.println("Инфо" + order);
+        if (order != null) {
             response.setStatus(200);
             return order;
         }
@@ -69,13 +71,14 @@ public class OrderApiController {
     }
 
     @PostMapping("api/order/booking")
-    public @ResponseBody AndroidOrder booking(@RequestParam("client_id") int clientId,
-                                              @RequestParam("car_id") int carId,
-                                              HttpServletResponse response){
+    public @ResponseBody
+    AndroidOrder booking(@RequestParam("client_id") int clientId,
+                         @RequestParam("car_id") int carId,
+                         HttpServletResponse response) {
 
         AndroidOrder order = orderService.startBooking(clientId, carId);
-        System.out.println("Начало бронирования"+order);
-        if (order!=null){
+        System.out.println("Начало бронирования" + order);
+        if (order != null) {
             response.setStatus(200);
             return order;
         }
@@ -85,12 +88,13 @@ public class OrderApiController {
 
 
     @PostMapping("api/order/rent")
-    public @ResponseBody AndroidOrder orderRent(@RequestParam("client_id") int clientId,
-                                           HttpServletResponse response){
+    public @ResponseBody
+    AndroidOrder orderRent(@RequestParam("client_id") int clientId,
+                           HttpServletResponse response) {
 
         AndroidOrder order = orderService.startAction(clientId, Action.RENT);
-        System.out.println("Аренда"+order);
-        if (order!=null){
+        System.out.println("Аренда" + order);
+        if (order != null) {
             response.setStatus(200);
             return order;
         }
@@ -99,12 +103,13 @@ public class OrderApiController {
     }
 
     @PostMapping("api/order/wait")
-    public @ResponseBody AndroidOrder orderWait(@RequestParam("client_id") int clientId,
-                                           HttpServletResponse response){
+    public @ResponseBody
+    AndroidOrder orderWait(@RequestParam("client_id") int clientId,
+                           HttpServletResponse response) {
 
         AndroidOrder order = orderService.startAction(clientId, Action.WAITING);
-        System.out.println("Ожидание"+order);
-        if (order!=null){
+        System.out.println("Ожидание" + order);
+        if (order != null) {
             response.setStatus(200);
             return order;
         }
@@ -113,12 +118,13 @@ public class OrderApiController {
     }
 
     @PostMapping("api/order/finish")
-    public @ResponseBody AndroidOrder rent(@RequestParam("client_id") int clientId,
-                                           HttpServletResponse response){
+    public @ResponseBody
+    AndroidOrder rent(@RequestParam("client_id") int clientId,
+                      HttpServletResponse response) {
 
         AndroidOrder order = orderService.finishOrder(clientId);
-        System.out.println("Финиш"+order);
-        if (order!=null){
+        System.out.println("Финиш" + order);
+        if (order != null) {
             response.setStatus(200);
             return order;
         }
@@ -127,11 +133,12 @@ public class OrderApiController {
     }
 
     @PostMapping("api/order/stopBooking")
-    public @ResponseBody AndroidOrder stopBooking(@RequestParam("client_id") int clientId,
-                                                  HttpServletResponse response){
+    public @ResponseBody
+    AndroidOrder stopBooking(@RequestParam("client_id") int clientId,
+                             HttpServletResponse response) {
         AndroidOrder order = orderService.stopBooking(clientId);
-        System.out.println("Стоп"+order);
-        if (order!=null){
+        System.out.println("Стоп" + order);
+        if (order != null) {
             response.setStatus(200);
             return order;
         }
@@ -140,12 +147,13 @@ public class OrderApiController {
     }
 
     @PostMapping("api/order/pay")
-    public @ResponseBody OrderPay getPay(@RequestParam("client_id") int clientId,
-                                         HttpServletResponse response){
+    public @ResponseBody
+    OrderPay getPay(@RequestParam("client_id") int clientId,
+                    HttpServletResponse response) {
         OrderPay orderPay = orderService.clientGetPay(clientId);
 
-        System.out.println("PAY"+orderPay);
-        if (orderPay!=null){
+        System.out.println("PAY" + orderPay);
+        if (orderPay != null) {
             response.setStatus(200);
             return orderPay;
         }
@@ -155,13 +163,13 @@ public class OrderApiController {
 
     @PostMapping("api/order/makePay")
     public @ResponseBody
-    String makePay(@RequestBody PayInfo payInfo,HttpServletResponse response){
-        if (payInfo!=null){
+    String makePay(@RequestBody PayInfo payInfo, HttpServletResponse response) {
+        if (payInfo != null) {
 
-            System.out.println("PAYINFO"+payInfo);
+            System.out.println("PAYINFO" + payInfo);
             Order order = orderService.getOrderById(payInfo.getOrderId());
 
-            if (order!=null) {
+            if (order != null) {
 
                 Payment payment = new Payment();
                 payment.setDate(new Date());
@@ -178,8 +186,6 @@ public class OrderApiController {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         return "";
     }
-
-
 
 
 }

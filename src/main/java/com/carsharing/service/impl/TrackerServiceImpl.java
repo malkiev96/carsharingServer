@@ -60,7 +60,7 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     public void delete(Tracker tracker) {
-        if (tracker !=null && tracker.getCar()==null) {
+        if (tracker != null && tracker.getCar() == null) {
             trackerDataService.deleteAllByTracker(tracker);
             trackerRepository.delete(tracker);
         }
@@ -71,7 +71,7 @@ public class TrackerServiceImpl implements TrackerService {
         for (Tracker tracker : trackers) {
             if (!isOnline(tracker)) {
                 tracker.setOnline(false);
-            }else tracker.setOnline(true);
+            } else tracker.setOnline(true);
             save(tracker);
         }
     }
@@ -89,7 +89,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     public Tracker testAuth(int id, String imei) {
         Tracker tracker = trackerRepository.getTrackerByIdentifyNumber(String.valueOf(id));
-        if (tracker!=null && tracker.getImei().equals(imei)){
+        if (tracker != null && tracker.getImei().equals(imei)) {
             tracker.setOnline(true);
             save(tracker);
             return tracker;

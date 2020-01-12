@@ -17,11 +17,11 @@ import java.util.TimeZone;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private final ClientService clientService;
+    private final PaymentService paymentService;
     private OrderRepository orderRepository;
     private OrderDataService orderDataService;
     private CarService carService;
-    private final ClientService clientService;
-    private final PaymentService paymentService;
 
 
     public OrderServiceImpl(OrderDataService orderDataService, OrderRepository orderRepository, CarService carService, ClientService clientService, TariffService tariffService, PaymentService paymentService) {
@@ -109,19 +109,20 @@ public class OrderServiceImpl implements OrderService {
 
             return androidOrder;
 
-        }return null;
+        }
+        return null;
     }
 
     @Override
     public AndroidOrder stopBooking(int clientId) {
         Order order = getCurrentOrderByClientID(clientId);
 
-        if (!order.getEnded() && !order.getBlocked()){
+        if (!order.getEnded() && !order.getBlocked()) {
 
-            OrderData dataBooking = orderDataService.getByOrderAndEnded(order,false);
+            OrderData dataBooking = orderDataService.getByOrderAndEnded(order, false);
             dataBooking.setEnded(true);
             dataBooking.setEnd(new Date());
-            dataBooking.setPrice(getPrice(dataBooking,order.getCar().getTariff()));
+            dataBooking.setPrice(getPrice(dataBooking, order.getCar().getTariff()));
 
             Car car = order.getCar();
             car.setRented(false);
@@ -135,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
 
             saveOrder(order);
 
-            if (getPrice(order)==0){
+            if (getPrice(order) == 0) {
                 Payment payment = new Payment();
                 payment.setPrice(0f);
                 payment.setToken("NULL PRICE");
@@ -148,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
             AndroidOrder androidOrder = new AndroidOrder();
             androidOrder.setClient(order.getClient());
             androidOrder.setCurrentAction(Action.FINISH);
-            androidOrder.setTime(getTimeByStartEnd(dataBooking.getStart(),dataBooking.getEnd()));
+            androidOrder.setTime(getTimeByStartEnd(dataBooking.getStart(), dataBooking.getEnd()));
             androidOrder.setPrice(getPrice(order));
 
             return androidOrder;
@@ -160,10 +161,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public AndroidOrder finishOrder(int clientId) {
         Order order = getCurrentOrderByClientID(clientId);
-        if (!order.getEnded() && !order.getBlocked()){
+        if (!order.getEnded() && !order.getBlocked()) {
 
-            OrderData data = orderDataService.getByOrderAndEnded(order,false);
-            data.setPrice(getPrice(data,order.getCar().getTariff()));
+            OrderData data = orderDataService.getByOrderAndEnded(order, false);
+            data.setPrice(getPrice(data, order.getCar().getTariff()));
             data.setEnd(new Date());
             data.setEnded(true);
             orderDataService.save(data);
@@ -196,14 +197,14 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = getCurrentOrderByClientID(clientId);
 
-        if (!order.getEnded() && !order.getBlocked()){
+        if (!order.getEnded() && !order.getBlocked()) {
 
             //Завершаем текущий статус
-            OrderData data = orderDataService.getByOrderAndEnded(order,false);
-            if (data.getAction()!=act) {
+            OrderData data = orderDataService.getByOrderAndEnded(order, false);
+            if (data.getAction() != act) {
                 data.setEnded(true);
                 data.setEnd(new Date());
-                data.setPrice(getPrice(data,order.getCar().getTariff()));
+                data.setPrice(getPrice(data, order.getCar().getTariff()));
                 orderDataService.save(data);
 
                 //Начинаем аренду
@@ -233,10 +234,10 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-    public AndroidOrder getActual(int clientId){
+    public AndroidOrder getActual(int clientId) {
         Order order = getCurrentOrderByClientID(clientId);
 
-        if (order!=null) {
+        if (order != null) {
             OrderData currentData = orderDataService.getByOrderAndEnded(order, false);
 
             AndroidOrder androidOrder = new AndroidOrder();
@@ -248,24 +249,24 @@ public class OrderServiceImpl implements OrderService {
 
             return androidOrder;
 
-        }else return null;
+        } else return null;
     }
 
     @Override
     public Order getCurrentOrderByClientID(int clientId) {
         Client client = clientService.getById(clientId);
-        Order order = orderRepository.findByClientAndEnded(client,false);
-        if (order.getOrderData()!=null) {
+        Order order = orderRepository.findByClientAndEnded(client, false);
+        if (order.getOrderData() != null) {
             return setDataToOrder(order);
-        }else return order;
+        } else return order;
     }
 
     @Override
     public boolean testBooking(int clientId, int carId) {
         Car car = carService.getCarById(carId);
         Client client = clientService.getById(clientId);
-        if (client!=null && car!=null){
-            if (!car.getRented() && car.getEnabled() && car.getTracker().getOnline()){
+        if (client != null && car != null) {
+            if (!car.getRented() && car.getEnabled() && car.getTracker().getOnline()) {
                 return client.getActivated() && client.getEnabled();
             }
         }
@@ -289,15 +290,15 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    private String getTime(Order order){
-        if (order.getEnded()){
-            return getTimeByStartEnd(order.getStart(),order.getEnd());
-        }else {
-            return getTimeByStartEnd(order.getStart(),new Date());
+    private String getTime(Order order) {
+        if (order.getEnded()) {
+            return getTimeByStartEnd(order.getStart(), order.getEnd());
+        } else {
+            return getTimeByStartEnd(order.getStart(), new Date());
         }
     }
 
-    private String getTime(Order order, int act){
+    private String getTime(Order order, int act) {
         try {
             String strDate;
             List<OrderData> orderDataList = orderDataService.getAllByOrder(order);
@@ -305,9 +306,9 @@ public class OrderServiceImpl implements OrderService {
             sdf.setTimeZone(TimeZone.getTimeZone("GMT+00"));
 
             Long time = 0L;
-            for (OrderData data: orderDataList){
-                if (data.getAction()==act){
-                    time += sdf.parse(getTimeByStartEnd(data.getStart(),data.getEnd())).getTime();
+            for (OrderData data : orderDataList) {
+                if (data.getAction() == act) {
+                    time += sdf.parse(getTimeByStartEnd(data.getStart(), data.getEnd())).getTime();
                 }
             }
             strDate = sdf.format(new Date(time));
@@ -318,11 +319,11 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-    private String getTimeByStartEnd(Date start,Date end) {
+    private String getTimeByStartEnd(Date start, Date end) {
         String strDate;
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+00"));
-        if (end!=null) {
+        if (end != null) {
             strDate = sdf.format(new Date(end.getTime() - start.getTime()));
         } else {
             strDate = sdf.format(new Date(System.currentTimeMillis() - start.getTime()));
@@ -331,54 +332,54 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private float getPrice(Order order){
+    private float getPrice(Order order) {
         List<OrderData> orderDataList = order.getOrderData();
         Tariff tariff = order.getCar().getTariff();
         Float price = 0f;
-        for (OrderData data: orderDataList){
-           price += getPrice(data,tariff);
+        for (OrderData data : orderDataList) {
+            price += getPrice(data, tariff);
         }
         return price;
     }
 
-    private float getPrice(OrderData data,Tariff tariff){
+    private float getPrice(OrderData data, Tariff tariff) {
         try {
-            if (data.getEnded()){
+            if (data.getEnded()) {
                 return data.getPrice();
-            }else {
+            } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                 sdf.setTimeZone(TimeZone.getTimeZone("GMT+00"));
                 Date currentDate = new Date();
-                Date date = sdf.parse(getTimeByStartEnd(data.getStart(),currentDate));
-                if (data.getAction()==Action.BOOKING){
+                Date date = sdf.parse(getTimeByStartEnd(data.getStart(), currentDate));
+                if (data.getAction() == Action.BOOKING) {
 
-                    int lim = tariff.getFreeBookingMin()*60*1000;
-                    if ((date.getTime()- lim)>0){
+                    int lim = tariff.getFreeBookingMin() * 60 * 1000;
+                    if ((date.getTime() - lim) > 0) {
                         //Беспл ожидание прошло
-                        long delta = (date.getTime()-lim)/60000;
-                        float pr = tariff.getPayBooking()*delta;
+                        long delta = (date.getTime() - lim) / 60000;
+                        float pr = tariff.getPayBooking() * delta;
                         data.setPrice(pr);
                         orderDataService.save(data);
                         return pr;
-                    }else {
+                    } else {
                         data.setPrice(0f);
                         orderDataService.save(data);
                         return 0;
                     }
 
-                }else if (data.getAction()==Action.RENT){
+                } else if (data.getAction() == Action.RENT) {
 
-                        Float pr = calcPrice(tariff.getPayRent(),date);
-                        data.setPrice(pr);
-                        orderDataService.save(data);
-                        return pr;
+                    Float pr = calcPrice(tariff.getPayRent(), date);
+                    data.setPrice(pr);
+                    orderDataService.save(data);
+                    return pr;
 
-                }else if (data.getAction()==Action.WAITING){
+                } else if (data.getAction() == Action.WAITING) {
 
-                        Float pr = calcPrice(tariff.getPayWaiting(),date);
-                        data.setPrice(pr);
-                        orderDataService.save(data);
-                        return pr;
+                    Float pr = calcPrice(tariff.getPayWaiting(), date);
+                    data.setPrice(pr);
+                    orderDataService.save(data);
+                    return pr;
                 }
             }
         } catch (ParseException e) {
@@ -401,7 +402,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderPay clientGetPay(int clientId) {
         OrderPay orderPay = new OrderPay();
         Order order = orderRepository.findByPaymentIsNullAndClientAndEndedIsTrue(clientService.getById(clientId));
-        if (order!=null){
+        if (order != null) {
             Car car = order.getCar();
             Client client = order.getClient();
             orderPay.setCarId(car.getId());
@@ -417,8 +418,8 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-    private Float calcPrice(Float price, Date date){
-        float f = ((float)date.getTime())/(float)60000;
+    private Float calcPrice(Float price, Date date) {
+        float f = ((float) date.getTime()) / (float) 60000;
         f *= price;
         f = Math.round(f);
         return f;

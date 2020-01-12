@@ -52,11 +52,11 @@ public class Car {
     private Tracker tracker;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_tariff",nullable = false)
+    @JoinColumn(name = "id_tariff", nullable = false)
     private Tariff tariff;
 
     @Override
     public String toString() {
-        return brand+" "+model;
+        return brand + " " + model;
     }
 }

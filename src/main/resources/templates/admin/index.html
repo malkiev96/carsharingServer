@@ -4,20 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Главная Страница</title>
-
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
-    <!--END GLOBAL STYLES -->
-
-    <!-- PAGE LEVEL STYLES -->
-    <!--<link th:href="@{/css/layout2.css}" rel="stylesheet" />-->
-    <!--<link th:href="@{/plugins/flot/examples/examples.css}" rel="stylesheet" />-->
-    <!--<link rel="stylesheet" th:href="@{/plugins/timeline/timeline.css}" />-->
-    <!-- END PAGE LEVEL  STYLES -->
+    <span th:replace="/fragments/head.html :: head"></span>
 </head>
 
 
@@ -60,34 +47,15 @@
 
 </div>
 
-<!--END MAIN WRAPPER -->
+<span th:replace="/fragments/scripts.html :: scripts"></span>
 
-<!-- FOOTER -->
-<div id="footer">
-
-</div>
-<!--END FOOTER -->
-
-
-<!-- GLOBAL SCRIPTS -->
-<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-<!-- END GLOBAL SCRIPTS -->
-
-<!-- PAGE LEVEL SCRIPTS -->
-<script th:src="@{/plugins/flot/jquery.flot.js}"></script>
-<script th:src="@{/plugins/flot/jquery.flot.resize.js}"></script>
-<script th:src="@{/plugins/flot/jquery.flot.time.js}"></script>
-<script th:src="@{/plugins/flot/jquery.flot.stack.js}"></script>
-<script th:src="@{/js/for_index.js}"></script>
-
-<!-- END PAGE LEVEL SCRIPTS -->
-
+<script th:src="@{/assets/plugins/flot/jquery.flot.js}"></script>
+<script th:src="@{/assets/plugins/flot/jquery.flot.resize.js}"></script>
+<script th:src="@{/assets/plugins/flot/jquery.flot.time.js}"></script>
+<script th:src="@{/assets/plugins/flot/jquery.flot.stack.js}"></script>
+<script th:src="@{/assets/js/for_index.js}"></script>
 
 </body>
-
-<!-- END BODY -->
 </html>
 
 

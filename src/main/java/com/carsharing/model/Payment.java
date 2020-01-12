@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "payment",schema = "public")
+@Table(name = "payment", schema = "public")
 @Getter
 @Setter
 public class Payment {
@@ -29,6 +29,6 @@ public class Payment {
     private Float price;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_order",nullable = false)
+    @JoinColumn(name = "id_order", nullable = false)
     private Order order;
 }

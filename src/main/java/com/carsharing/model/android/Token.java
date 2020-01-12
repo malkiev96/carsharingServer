@@ -4,6 +4,7 @@ public class Token {
 
     private int id;
     private String token;
+
     public Token() {
     }
 

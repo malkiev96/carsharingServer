@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.util.List;
 
 @Entity
 @Table(name = "tariff", schema = "public")
@@ -34,7 +33,7 @@ public class Tariff {
     @Column(name = "free_booking_min", nullable = false)
     private int freeBookingMin;
 
-    @Column(name = "enabled",columnDefinition = "boolean default true")
+    @Column(name = "enabled", columnDefinition = "boolean default true")
     private Boolean enabled;
 
     @Column(name = "pay_crash", nullable = false)

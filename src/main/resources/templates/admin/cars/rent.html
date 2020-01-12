@@ -4,18 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title th:text="${car.number+' - Панель Управления'}"></title>
-
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
-    <!--END GLOBAL STYLES -->
-
-    <!-- PAGE LEVEL STYLES -->
-    <link th:href="@{/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet" />
-    <!-- END PAGE LEVEL  STYLES -->
+    <span th:replace="/fragments/head.html :: head"></span>
 </head>
 
 
@@ -134,27 +123,8 @@
 
 </div>
 
-<!--END MAIN WRAPPER -->
 
-<!-- FOOTER -->
-<div id="footer">
-
-</div>
-<!--END FOOTER -->
-
-<!-- GLOBAL SCRIPTS -->
-<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-<!-- END GLOBAL SCRIPTS -->
-
-<!-- PAGE LEVEL SCRIPTS -->
-<script th:src="@{/plugins/dataTables/jquery.dataTables.js}"></script>
-<script th:src="@{/plugins/dataTables/dataTables.bootstrap.js}"></script>
-
-
-<!-- END PAGE LEVEL SCRIPTS -->
-
+<span th:replace="/fragments/scripts.html :: scripts"></span>
 
 </body>
 

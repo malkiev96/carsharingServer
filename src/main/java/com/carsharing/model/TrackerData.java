@@ -33,10 +33,10 @@ public class TrackerData {
     @Column(name = "mileage")
     private Double mileage;
 
-    @Column(name = "engine_on",columnDefinition = "boolean default false")
+    @Column(name = "engine_on", columnDefinition = "boolean default false")
     private Boolean engineOn;
 
-    @Column(name = "opened",columnDefinition = "boolean default false")
+    @Column(name = "opened", columnDefinition = "boolean default false")
     private Boolean opened;
 
     @Column(name = "timestamp")

@@ -12,9 +12,13 @@ import java.util.List;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
     Car getCarByNumber(String number);
+
     Car getCarByTracker(Tracker tracker);
+
     List<Car> getAllByEnabled(boolean enabled);
+
     List<Car> getAllByRented(boolean rented);
+
     @Query("SELECT c from Car c where c.tracker.online=:online")
     List<Car> getAllByOnline(@Param("online") boolean online);
 }

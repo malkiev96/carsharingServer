@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = getUserByUsername(s);
-        if (user!=null) {
+        if (user != null) {
             Set<Role> roles = user.getRoles();
             List<GrantedAuthority> authorities = getUserAuthority(roles);
             return buildUserForAuthentication(user, authorities);

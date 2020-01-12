@@ -18,12 +18,12 @@ public class TariffApiController {
     }
 
     @GetMapping("api/tariff/getAll")
-    public List<Tariff> getTariffs(){
+    public List<Tariff> getTariffs() {
         return tariffService.getAllByEnabled(true);
     }
 
     @GetMapping("api/tariff/{id}")
-    public Tariff getTariff(@PathVariable("id") int id){
+    public Tariff getTariff(@PathVariable("id") int id) {
         return tariffService.getById(id);
     }
 

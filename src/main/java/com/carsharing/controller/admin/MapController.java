@@ -34,11 +34,11 @@ public class MapController {
     }
 
     @ModelAttribute
-    public void carCount(Model model,Principal principal){
-        model.addAttribute("username",principal.getName());
-        model.addAttribute("carOffline",carService.getAllByOnline(false).size());
-        model.addAttribute("clientNew",clientService.getAllByActivatedAndEnabled(false,true).size());
-        model.addAttribute("orderNotPaid",orderService.getAllNotPaid().size());
+    public void carCount(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("carOffline", carService.getAllByOnline(false).size());
+        model.addAttribute("clientNew", clientService.getAllByActivatedAndEnabled(false, true).size());
+        model.addAttribute("orderNotPaid", orderService.getAllNotPaid().size());
     }
 
     @RequestMapping(value = "/admin/map", method = RequestMethod.GET)
@@ -61,26 +61,26 @@ public class MapController {
         return markerList;
     }
 
-    @RequestMapping(value = "/admin/map/api/zones",method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/map/api/zones", method = RequestMethod.GET)
     @ResponseBody
-    public List<Zone> getZones(){
+    public List<Zone> getZones() {
         return zoneRepository.findAll();
     }
 
-    @RequestMapping(value = "/admin/map/api/deleteZone",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/map/api/deleteZone", method = RequestMethod.POST)
     @ResponseBody
     public String deleteZone(@RequestParam("id") int id,
-                             HttpServletResponse response){
+                             HttpServletResponse response) {
         try {
             zoneRepository.deleteById(id);
             response.setStatus(HttpServletResponse.SC_OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         return "";
     }
 
-    @RequestMapping(value = "/admin/map/api/savePolygon",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/map/api/savePolygon", method = RequestMethod.POST)
     @ResponseBody
     public String savePolygon(
             @RequestParam("id") int id,
@@ -89,11 +89,11 @@ public class MapController {
             HttpServletResponse response) {
 
         Zone zone;
-        if (id==0){
+        if (id == 0) {
             zone = new Zone();
             zone.setPolygon(polygon);
             zone.setType(type);
-        }else {
+        } else {
             zone = zoneRepository.getOne(id);
             zone.setPolygon(polygon);
             zone.setType(type);

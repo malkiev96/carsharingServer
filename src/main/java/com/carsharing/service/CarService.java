@@ -32,6 +32,7 @@ public interface CarService {
     void deleteCar(Car car);
 
     boolean openCar(Car car);
+
     boolean closeCar(Car car);
 
     boolean testCarOnZone(Car car, Zone zone);

@@ -21,9 +21,9 @@ public interface OrderService {
 
     List<Order> getAllByClient(Client client);
 
-    boolean testBooking(int clientId,String carNumber);
+    boolean testBooking(int clientId, String carNumber);
 
-    boolean testBooking(int clientId,int carId);
+    boolean testBooking(int clientId, int carId);
 
     AndroidOrder startAction(int clientId, int act);
 
@@ -38,6 +38,7 @@ public interface OrderService {
     AndroidOrder startBooking(int clientId, int carId);
 
     List<Order> getAllPaid();
+
     List<Order> getAllNotPaid();
 
     OrderPay clientGetPay(int clientId);

@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface MarkerService {
     List<Marker> getAll();
+
     List<AndroidCar> getAllForClients();
 }

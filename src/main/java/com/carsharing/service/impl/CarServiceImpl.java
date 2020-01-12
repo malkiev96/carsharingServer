@@ -41,11 +41,11 @@ public class CarServiceImpl implements CarService {
         androidCar.setId(car.getId());
         androidCar.setTransmission(car.getTransmission());
         androidCar.setNumber(car.getNumber());
-        androidCar.setName(car.getBrand()+" "+car.getModel());
+        androidCar.setName(car.getBrand() + " " + car.getModel());
         androidCar.setTariff(car.getTariff());
         androidCar.setYear(car.getYear());
         TrackerData data = getActualData(car);
-        if (data!=null) {
+        if (data != null) {
             androidCar.setFuelLevel(data.getFuelLevel());
             androidCar.setLat(data.getLat());
             androidCar.setLon(data.getLon());
@@ -64,9 +64,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public TrackerData getActualData(Car car) {
         TrackerData data = trackerDataService.getLastDataByTracker(car.getTracker());
-        if (data!=null){
-            return data;
-        }else return null;
+        return data;
     }
 
     public List<Car> getAllByOpened(boolean opened) {
@@ -76,7 +74,7 @@ public class CarServiceImpl implements CarService {
             TrackerData trackerData = trackerDataService.getLastDataByTracker(tracker);
             if (trackerData != null) {
                 if (trackerData.getOpened().equals(opened))
-                cars.add(tracker.getCar());
+                    cars.add(tracker.getCar());
             }
         }
         return cars;
@@ -84,10 +82,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public boolean openCar(Car car) {
-        if (car!=null){
+        if (car != null) {
             Tracker tracker = car.getTracker();
 
-            if (tracker.getAction()==0){
+            if (tracker.getAction() == 0) {
                 tracker.setAction(2);
                 trackerService.save(tracker);
                 TrackerData data = trackerDataService.getLastDataByTracker(tracker);
@@ -96,16 +94,16 @@ public class CarServiceImpl implements CarService {
             }
 
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     @Override
     public boolean closeCar(Car car) {
-        if (car!=null){
+        if (car != null) {
             Tracker tracker = car.getTracker();
-            if (tracker.getAction()==0){
+            if (tracker.getAction() == 0) {
                 tracker.setAction(1);
                 trackerService.save(tracker);
                 TrackerData data = trackerDataService.getLastDataByTracker(tracker);
@@ -113,7 +111,7 @@ public class CarServiceImpl implements CarService {
                 trackerDataService.save(data);
             }
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -122,7 +120,7 @@ public class CarServiceImpl implements CarService {
     public boolean testCarOnZone(Car car, Zone zone) {
 
         TrackerData data = getActualData(car);
-        if (data!=null && zone!=null) {
+        if (data != null && zone != null) {
 
             JSONArray array = new JSONArray(zone.getPolygon());
 
@@ -133,7 +131,7 @@ public class CarServiceImpl implements CarService {
                 double lon = object.getDouble("lng");
                 points.push(lat, lon);
             }
-            return CDeterminant.determine(points, data.getLat(),data.getLon());
+            return CDeterminant.determine(points, data.getLat(), data.getLon());
         }
 
         return false;

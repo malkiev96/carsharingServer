@@ -4,28 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Тарифы - Панель Управления</title>
-
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme.css}" />
-    <link rel="stylesheet" th:href="@{/css/MoneAdmin.css}" />
-    <link rel="stylesheet" th:href="@{/plugins/Font-Awesome/css/font-awesome.css}" />
-    <!--END GLOBAL STYLES -->
-
-    <!-- PAGE LEVEL STYLES -->
-
-    <link rel="stylesheet" href="/css/jquery-ui.css"/>
-    <link rel="stylesheet" href="/plugins/uniform/themes/default/css/uniform.default.css" />
-    <link rel="stylesheet" href="/plugins/inputlimiter/jquery.inputlimiter.1.0.css" />
-    <link rel="stylesheet" href="/plugins/chosen/chosen.min.css" />
-    <link rel="stylesheet" href="/plugins/colorpicker/css/colorpicker.css" />
-    <link rel="stylesheet" href="/plugins/tagsinput/jquery.tagsinput.css" />
-    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker-bs3.css" />
-    <link rel="stylesheet" href="/plugins/datepicker/css/datepicker.css" />
-    <link rel="stylesheet" href="/plugins/timepicker/css/bootstrap-timepicker.min.css" />
-    <link rel="stylesheet" href="/plugins/switch/static/stylesheets/bootstrap-switch.css" />
-    <!-- END PAGE LEVEL  STYLES -->
+    <span th:replace="/fragments/head.html :: head"></span>
 </head>
 
 
@@ -33,11 +12,7 @@
 
 <!-- MAIN WRAPPER -->
 <div id="wrap" >
-
-
-    <!-- HEADER SECTION -->
     <div th:replace="/fragments/header.html :: header"></div>
-    <!-- END HEADER SECTION -->
 
     <div id="left">
         <div class="media user-media well-small">
@@ -174,38 +149,8 @@
 
 </div>
 
-<!--END MAIN WRAPPER -->
+<span th:replace="/fragments/scripts.html :: scripts"></span>
 
-<!-- FOOTER -->
-<div id="footer">
-
-</div>
-<!--END FOOTER -->
-
-
-<!-- GLOBAL SCRIPTS -->
-<script th:src="@{/plugins/jquery-2.0.3.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/plugins/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-<!-- END GLOBAL SCRIPTS -->
-
-<!-- PAGE LEVEL SCRIPTS -->
-<script src="/js/jquery-ui.min.js"></script>
-<script src="/plugins/uniform/jquery.uniform.min.js"></script>
-<script src="/plugins/inputlimiter/jquery.inputlimiter.1.3.1.min.js"></script>
-<script src="/plugins/chosen/chosen.jquery.min.js"></script>
-<script src="/plugins/colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="/plugins/tagsinput/jquery.tagsinput.min.js"></script>
-<script src="/plugins/validVal/js/jquery.validVal.min.js"></script>
-<script src="/plugins/daterangepicker/daterangepicker.js"></script>
-<script src="/plugins/daterangepicker/moment.min.js"></script>
-<script src="/plugins/datepicker/js/bootstrap-datepicker.js"></script>
-<script src="/plugins/timepicker/js/bootstrap-timepicker.min.js"></script>
-<script src="/plugins/switch/static/js/bootstrap-switch.min.js"></script>
-<script src="/plugins/jquery.dualListbox-1.3/jquery.dualListBox-1.3.min.js"></script>
-<script src="/plugins/autosize/jquery.autosize.min.js"></script>
-<script src="/plugins/jasny/js/bootstrap-inputmask.js"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
 <script>
     var myCheckBox = $('#useFreeWaiting');
     var timeBlock = $('#timeBlock');
@@ -216,13 +161,9 @@
         else {
             timeBlock.hide();
         }
-
     });
 </script>
-
 </body>
-
-<!-- END BODY -->
 </html>
 
 
