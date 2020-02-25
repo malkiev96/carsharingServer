@@ -9,9 +9,7 @@ import java.util.List;
 
 @Repository
 public interface OrderDataRepository extends JpaRepository<OrderData, Integer> {
+
     List<OrderData> findAllByOrder(Order order);
-
-    OrderData findOrderDataByOrderAndAction(Order order, int action);
-
     OrderData findOrderDataByOrderAndEnded(Order order, boolean ended);
 }

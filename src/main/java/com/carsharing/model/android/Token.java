@@ -1,31 +1,17 @@
 package com.carsharing.model.android;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Token {
 
     private int id;
     private String token;
 
-    public Token() {
-    }
-
-    public Token(int id, String token) {
-        this.id = id;
-        this.token = token;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

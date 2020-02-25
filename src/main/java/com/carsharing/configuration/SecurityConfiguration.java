@@ -1,6 +1,5 @@
 package com.carsharing.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +18,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Qualifier("userServiceImpl")
-    @Autowired
     private UserDetailsService userDetailsService;
+
+    public SecurityConfiguration(
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            @Qualifier("userServiceImpl") UserDetailsService userDetailsService) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

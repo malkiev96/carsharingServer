@@ -9,6 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PayInfo {
+
     private int orderId;
     private String token;
     private float price;

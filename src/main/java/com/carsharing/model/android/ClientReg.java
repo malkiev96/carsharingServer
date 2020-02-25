@@ -2,9 +2,11 @@ package com.carsharing.model.android;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class ClientReg {
 
     private String firstname;
@@ -18,4 +20,5 @@ public class ClientReg {
     private String imageByte3;
     private String imageByte4;
     private String imageByte5;
+
 }

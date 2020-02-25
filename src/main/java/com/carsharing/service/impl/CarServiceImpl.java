@@ -9,8 +9,8 @@ import com.carsharing.repository.CarRepository;
 import com.carsharing.service.CarService;
 import com.carsharing.service.TrackerDataService;
 import com.carsharing.service.TrackerService;
-import com.carsharing.service.polygon.CDeterminant;
-import com.carsharing.service.polygon.CPoints;
+import com.carsharing.service.polygon.Determinant;
+import com.carsharing.service.polygon.Points;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -124,14 +124,14 @@ public class CarServiceImpl implements CarService {
 
             JSONArray array = new JSONArray(zone.getPolygon());
 
-            CPoints points = new CPoints(array.length());
+            Points points = new Points(array.length());
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
                 double lat = object.getDouble("lat");
                 double lon = object.getDouble("lng");
                 points.push(lat, lon);
             }
-            return CDeterminant.determine(points, data.getLat(), data.getLon());
+            return Determinant.determine(points, data.getLat(), data.getLon());
         }
 
         return false;

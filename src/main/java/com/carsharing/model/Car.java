@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Setter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Car {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_seq_gen")
     @SequenceGenerator(name = "car_seq_gen", sequenceName = "car_id_seq")

@@ -15,15 +15,15 @@ public class SampleServer extends Thread {
 
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
-    String time;//9-16
-    String module1;//17-18
-    String lat;//27-34 Разделить на 600000
-    String lon;//35-42
-    String speed;//43-50 Floating Point to Hex Converter
-    String mileage;//51-58 Floating Point to Hex Converter
-    String stateOut1;//59-60
-    String fuelLevel;//61-62
-    String hexId;
+    private String time;//9-16
+    private String module1;//17-18
+    private String lat;//27-34 Разделить на 600000
+    private String lon;//35-42
+    private String speed;//43-50 Floating Point to Hex Converter
+    private String mileage;//51-58 Floating Point to Hex Converter
+    private String stateOut1;//59-60
+    private String fuelLevel;//61-62
+    private String hexId;
     private TrackerService trackerService;
     private TrackerDataService trackerDataService;
     private Socket s;
@@ -41,52 +41,38 @@ public class SampleServer extends Thread {
     }
 
     private static byte[] fromHexString(final String s) {
+
         String[] v = s.split(" ");
         byte[] arr = new byte[v.length];
         int i = 0;
         for (String val : v) {
             arr[i++] = Integer.decode("0x" + val).byteValue();
-
         }
         return arr;
     }
 
     private static String bytesToHex(byte[] bytes) {
+
         char[] hexChars = new char[bytes.length * 2];
+
         for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
+
         return new String(hexChars);
     }
 
-    private static byte crc8(byte[] buffer) {
-        byte crc = (byte) 0xFF;
-        for (byte b : buffer) {
-            crc ^= b;
-            for (int i = 0; i < 8; i++) {
-                crc = (crc & 0x80) != 0 ? (byte) ((crc << 1) ^ 0x31) : (byte) (crc << 1);
-            }
-        }
-        return crc;
-    }
 
     // Convert the 32-bit binary into the decimal
     private static float getFloat32(String dex) {
         int i = Integer.parseInt(dex, 16);
         dex = Integer.toBinaryString(i);
         int intBits = Integer.parseInt(dex, 2);
-        float myFloat = Float.intBitsToFloat(intBits);
-        return myFloat;
+        return Float.intBitsToFloat(intBits);
     }
 
-    // Get 32-bit IEEE 754 format of the decimal value
-    private static String getBinary32(float value) {
-        int intBits = Float.floatToIntBits(value);
-        String binary = Integer.toBinaryString(intBits);
-        return binary;
-    }
 
     public void run() {
         try {
@@ -118,7 +104,6 @@ public class SampleServer extends Thread {
                         String post = "40 4e 54 43 ";
                         post += hexId;
                         post += " 01 00 00 00 04 00 74 69 2a 21 31 4e";  //40 4e 54 43 01 00 00 00 01 00 00 00 04 00 74 69 2a 21 31 4e
-                        System.out.println("Открываем двери" + post);
                         os.write(fromHexString(post));
                         tracker.setAction(0);
                         trackerService.save(tracker);
@@ -129,13 +114,12 @@ public class SampleServer extends Thread {
                         byte[] getBytes = new byte[count];
                         System.arraycopy(buffer, 0, getBytes, 0, count);
                         String text = bytesToHex(getBytes);
-                        System.out.println("get:" + text);
 
                         String head;
 
                         if (text.equals("7F")) {
+                            //ping
                             head = "7F";
-                            System.out.println("ПИНГ");
                         } else {
                             head = text.substring(0, 4);
                         }
@@ -163,17 +147,14 @@ public class SampleServer extends Thread {
                             float floatSpeed = getFloat32(speed);
                             float floatMileage = getFloat32(mileage);
 
-                            int intTime = Integer.parseInt(time, 16);
                             int intModule1 = Integer.parseInt(module1, 16);
                             int intLat = Integer.parseInt(lat, 16);
                             int intLon = Integer.parseInt(lon, 16);
                             int intStageOut1 = Integer.parseInt(stateOut1, 16);
                             int intFuelLevel = Integer.parseInt(fuelLevel, 16);
-                            System.out.println("ТОПЛИВО " + intFuelLevel);
 
                             double doubleLat = (double) intLat / 600000;
                             double doubleLon = (double) intLon / 600000;
-
 
                             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -193,9 +174,7 @@ public class SampleServer extends Thread {
                                 data.setOpened(true);
                             } else data.setOpened(false);
 
-
                             data.setTracker(tracker);
-
                             trackerDataService.save(data);
 
                         }

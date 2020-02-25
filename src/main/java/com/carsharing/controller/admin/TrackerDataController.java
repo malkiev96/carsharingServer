@@ -2,9 +2,9 @@ package com.carsharing.controller.admin;
 
 import com.carsharing.model.Tracker;
 import com.carsharing.model.TrackerData;
-import com.carsharing.service.CarService;
 import com.carsharing.service.TrackerDataService;
 import com.carsharing.service.TrackerService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,18 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 
 @Controller
+@AllArgsConstructor
 public class TrackerDataController {
 
 
-    private final TrackerService trackerService;
-    private final TrackerDataService trackerDataService;
-    private final CarService carService;
-
-    public TrackerDataController(TrackerService trackerService, TrackerDataService trackerDataService, CarService carService) {
-        this.trackerService = trackerService;
-        this.trackerDataService = trackerDataService;
-        this.carService = carService;
-    }
+    private TrackerService trackerService;
+    private TrackerDataService trackerDataService;
 
     @RequestMapping(value = "/tracker/data", method = RequestMethod.POST)
     @ResponseBody

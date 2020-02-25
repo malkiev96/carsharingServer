@@ -8,11 +8,11 @@ import com.carsharing.model.android.Token;
 import com.carsharing.service.ClientService;
 import com.carsharing.service.DocumentService;
 import com.carsharing.valid.Pattern;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -21,17 +21,12 @@ import java.util.Date;
 import static org.apache.tomcat.util.codec.binary.Base64.decodeBase64;
 
 @RestController
+@AllArgsConstructor
 public class SignApiController {
 
-    private final ClientService clientService;
-    private final DocumentService documentService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public SignApiController(ClientService clientService, DocumentService documentService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.clientService = clientService;
-        this.documentService = documentService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private ClientService clientService;
+    private DocumentService documentService;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("api/client/{id}")
     public Client getClient(@PathVariable("id") int id) {
@@ -41,18 +36,16 @@ public class SignApiController {
     @PostMapping("api/client/token")
     public @ResponseBody
     Client token(@RequestBody Token token, HttpServletResponse response) {
-        try {
-            Client client = clientService.getById(token.getId());
-            if (client != null && client.getToken().equals(token.getToken())) {
-                response.setStatus(HttpServletResponse.SC_OK);
-                return client;
-            } else {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
-                return null;
-            }
-        } catch (EntityNotFoundException e) {
+
+        Client client = clientService.getById(token.getId());
+
+        if (client != null && client.getToken().equals(token.getToken())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return client;
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
         }
-        return null;
     }
 
     @PostMapping("/api/client/registration")
@@ -77,7 +70,6 @@ public class SignApiController {
                     client.setMiddlename(clientReg.getMiddlename());
                     client.setFirstname(clientReg.getFirstname());
                     client.setSecondname(clientReg.getSecondname());
-                    System.out.println(client.getMiddlename());
 
                     clientService.saveClient(client);
                     client = clientService.getByTelephone(clientReg.getTelephone());
@@ -108,7 +100,7 @@ public class SignApiController {
                 }
             }
         }
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         return null;
     }
 
@@ -135,8 +127,7 @@ public class SignApiController {
 
     @PostMapping("api/client/login")
     public @ResponseBody
-    Client login(@RequestBody LogPass logPass, HttpServletResponse response) {
+    Client login(@RequestBody LogPass logPass) {
         return clientService.login(logPass);
     }
-
 }

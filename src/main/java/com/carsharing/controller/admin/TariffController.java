@@ -5,6 +5,7 @@ import com.carsharing.service.CarService;
 import com.carsharing.service.ClientService;
 import com.carsharing.service.OrderService;
 import com.carsharing.service.TariffService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,20 +17,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @Controller
+@AllArgsConstructor
 public class TariffController {
 
-    private final TariffService tariffService;
-    private final CarService carService;
-    private final ClientService clientService;
-    private final OrderService orderService;
-
-    public TariffController(TariffService tariffService, CarService carService, ClientService clientService, OrderService orderService) {
-        this.tariffService = tariffService;
-        this.carService = carService;
-        this.clientService = clientService;
-        this.orderService = orderService;
-    }
-
+    private TariffService tariffService;
+    private CarService carService;
+    private ClientService clientService;
+    private OrderService orderService;
 
     @ModelAttribute
     public void carCount(Model model, Principal principal) {
@@ -38,7 +32,6 @@ public class TariffController {
         model.addAttribute("clientNew", clientService.getAllByActivatedAndEnabled(false, true).size());
         model.addAttribute("orderNotPaid", orderService.getAllNotPaid().size());
     }
-
 
     @RequestMapping(value = "/admin/tariff", method = RequestMethod.GET)
     public String index(Model model) {
@@ -55,7 +48,6 @@ public class TariffController {
             return "admin/tariff/edit";
         } else return "redirect:/admin/tariff";
     }
-
 
     @RequestMapping(value = "/admin/tariff/new", method = RequestMethod.GET)
     public String addTariff(Model model) {
@@ -81,12 +73,7 @@ public class TariffController {
                 e.printStackTrace();
             }
         }
-
-        try {
-            tariffService.save(tariff);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        tariffService.save(tariff);
 
         return "redirect:/admin/tariff";
     }

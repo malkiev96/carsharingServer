@@ -9,6 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Marker {
+
     private int id;
     private Double lat;
     private Double lon;
@@ -18,7 +19,7 @@ public class Marker {
     private String year;
     private String vin;
     private Boolean online;
-    private Boolean enabled;//car
+    private Boolean enabled;
     private Boolean opened;
     private Boolean engineOn;
     private Boolean rented;
@@ -26,6 +27,5 @@ public class Marker {
     private int speed;
     private int fuelLevel;
     private Double mileage;
-
 
 }

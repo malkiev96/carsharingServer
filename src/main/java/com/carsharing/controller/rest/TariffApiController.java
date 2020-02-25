@@ -2,6 +2,7 @@ package com.carsharing.controller.rest;
 
 import com.carsharing.model.Tariff;
 import com.carsharing.service.TariffService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,13 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class TariffApiController {
 
-    private final TariffService tariffService;
-
-    public TariffApiController(TariffService tariffService) {
-        this.tariffService = tariffService;
-    }
+    private TariffService tariffService;
 
     @GetMapping("api/tariff/getAll")
     public List<Tariff> getTariffs() {

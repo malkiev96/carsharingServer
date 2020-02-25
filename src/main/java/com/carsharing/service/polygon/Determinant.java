@@ -1,7 +1,7 @@
 package com.carsharing.service.polygon;
 
-public class CDeterminant {
-    public static boolean determine(final CPoints points, double x, double y) {
+public class Determinant {
+    public static boolean determine(final Points points, double x, double y) {
 
         boolean result = false;
         int count = points.count();

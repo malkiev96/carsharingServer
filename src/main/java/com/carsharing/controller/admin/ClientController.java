@@ -6,6 +6,7 @@ import com.carsharing.model.Order;
 import com.carsharing.service.CarService;
 import com.carsharing.service.ClientService;
 import com.carsharing.service.OrderService;
+import lombok.AllArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,18 +25,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
+@AllArgsConstructor
 public class ClientController {
 
-    private final ClientService clientService;
-    private final CarService carService;
-    private final OrderService orderService;
-
-    public ClientController(ClientService clientService, CarService carService, OrderService orderService) {
-        this.clientService = clientService;
-        this.carService = carService;
-        this.orderService = orderService;
-    }
-
+    private ClientService clientService;
+    private CarService carService;
+    private OrderService orderService;
 
     @ModelAttribute
     public void carCount(Model model, Principal principal) {

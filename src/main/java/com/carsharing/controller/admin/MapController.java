@@ -8,6 +8,7 @@ import com.carsharing.service.CarService;
 import com.carsharing.service.ClientService;
 import com.carsharing.service.MarkerService;
 import com.carsharing.service.OrderService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,21 +18,14 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class MapController {
 
-    private final MarkerService markerService;
-    private final CarService carService;
-    private final ClientService clientService;
-    private final ZoneRepository zoneRepository;
-    private final OrderService orderService;
-
-    public MapController(MarkerService markerService, CarService carService, ClientService clientService, ZoneRepository zoneRepository, OrderService orderService) {
-        this.markerService = markerService;
-        this.carService = carService;
-        this.clientService = clientService;
-        this.zoneRepository = zoneRepository;
-        this.orderService = orderService;
-    }
+    private MarkerService markerService;
+    private CarService carService;
+    private ClientService clientService;
+    private ZoneRepository zoneRepository;
+    private OrderService orderService;
 
     @ModelAttribute
     public void carCount(Model model, Principal principal) {
@@ -88,21 +82,12 @@ public class MapController {
             @RequestParam("type") int type,
             HttpServletResponse response) {
 
-        Zone zone;
-        if (id == 0) {
-            zone = new Zone();
-            zone.setPolygon(polygon);
-            zone.setType(type);
-        } else {
-            zone = zoneRepository.getOne(id);
-            zone.setPolygon(polygon);
-            zone.setType(type);
-        }
+        Zone zone = id == 0 ? new Zone() : zoneRepository.getOne(id);
+        zone.setPolygon(polygon);
+        zone.setType(type);
 
         zoneRepository.save(zone);
-
         response.setStatus(HttpServletResponse.SC_OK);
-
         return "";
     }
 }

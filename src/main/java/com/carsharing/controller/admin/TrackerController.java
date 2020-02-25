@@ -5,6 +5,7 @@ import com.carsharing.service.CarService;
 import com.carsharing.service.ClientService;
 import com.carsharing.service.OrderService;
 import com.carsharing.service.TrackerService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,19 +15,13 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
+@AllArgsConstructor
 public class TrackerController {
 
-    private final CarService carService;
-    private final ClientService clientService;
-    private final OrderService orderService;
+    private CarService carService;
+    private ClientService clientService;
+    private OrderService orderService;
     private TrackerService trackerService;
-
-    public TrackerController(TrackerService trackerService, CarService carService, ClientService clientService, OrderService orderService) {
-        this.trackerService = trackerService;
-        this.carService = carService;
-        this.clientService = clientService;
-        this.orderService = orderService;
-    }
 
     @ModelAttribute
     public void carCount(Model model, Principal principal) {
@@ -37,7 +32,7 @@ public class TrackerController {
     }
 
     @RequestMapping(value = "/admin/tracker", method = RequestMethod.GET)
-    public String index(Model model, @RequestParam(value = "v", required = false) String v) {
+    public String index(Model model, @RequestParam(value = "v", required = false) String view) {
         trackerService.testAllOnline();
 
         model.addAttribute("allCount", trackerService.getAll().size());
@@ -47,11 +42,11 @@ public class TrackerController {
         model.addAttribute("offlineCount", trackerService.getAllByOnline(false).size());
         model.addAttribute("emptyCount", trackerService.getEmptyTrackers().size());
 
-        if (v == null) {
+        if (view == null) {
             model.addAttribute("trackers", trackerService.getAll());
 
         } else {
-            switch (v) {
+            switch (view) {
                 case "all":
                     model.addAttribute("trackers", trackerService.getAll());
                     break;
@@ -109,6 +104,4 @@ public class TrackerController {
         model.addAttribute("tracker", new Tracker());
         return "admin/tracker/new";
     }
-    /*@RequestMapping(value = "/admin/tracker/new",method = RequestMethod.POST)
-    public String newTrackerPost(@ModelAttribute)*/
 }

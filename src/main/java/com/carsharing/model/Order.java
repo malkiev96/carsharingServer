@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq_gen")
     @SequenceGenerator(name = "order_seq_gen", sequenceName = "order_id_seq")
@@ -51,6 +52,5 @@ public class Order {
 
     @OneToOne(mappedBy = "order", fetch = FetchType.EAGER)
     private Payment payment;
-
 
 }

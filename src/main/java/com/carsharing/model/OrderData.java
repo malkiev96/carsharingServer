@@ -11,6 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class OrderData {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderData_seq_gen")
     @SequenceGenerator(name = "orderData_seq_gen", sequenceName = "orderData_id_seq")
@@ -35,6 +36,5 @@ public class OrderData {
     @ManyToOne
     @JoinColumn(name = "id_order")
     private Order order;
-
 
 }

@@ -1,15 +1,14 @@
 package com.carsharing.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 public class MarkerList {
+
+    @Getter
+    @Setter
     private List<Marker> markerList;
 
-    public List<Marker> getMarkerList() {
-        return markerList;
-    }
-
-    public void setMarkerList(List<Marker> markerList) {
-        this.markerList = markerList;
-    }
 }

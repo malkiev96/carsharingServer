@@ -5,6 +5,7 @@ import com.carsharing.model.Tariff;
 import com.carsharing.model.Tracker;
 import com.carsharing.model.TrackerData;
 import com.carsharing.service.*;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
+@AllArgsConstructor
 public class CarController {
 
     private CarService carService;
@@ -20,15 +22,6 @@ public class CarController {
     private OrderService orderService;
     private ClientService clientService;
     private TariffService tariffService;
-
-    public CarController(OrderService orderService, CarService carService, TrackerService trackerService, TrackerDataService trackerDataService, ClientService clientService, TariffService tariffService) {
-        this.orderService = orderService;
-        this.carService = carService;
-        this.trackerService = trackerService;
-        this.trackerDataService = trackerDataService;
-        this.clientService = clientService;
-        this.tariffService = tariffService;
-    }
 
     @ModelAttribute
     public void carCount(Model model, Principal principal) {
