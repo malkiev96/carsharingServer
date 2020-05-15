@@ -16,18 +16,18 @@ import java.security.Principal;
 @AllArgsConstructor
 public class CarController {
 
-    private CarService carService;
-    private TrackerService trackerService;
-    private TrackerDataService trackerDataService;
-    private OrderService orderService;
-    private ClientService clientService;
-    private TariffService tariffService;
+    private final CarService carService;
+    private final TrackerService trackerService;
+    private final TrackerDataService trackerDataService;
+    private final OrderService orderService;
+    private final ClientService clientService;
+    private final TariffService tariffService;
 
     @ModelAttribute
     public void carCount(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-        model.addAttribute("carOffline", carService.getAllByOnline(false).size());
-        model.addAttribute("clientNew", clientService.getAllByActivatedAndEnabled(false, true).size());
+        model.addAttribute("carOffline", carService.getOnlineCars(false).size());
+        model.addAttribute("clientNew", clientService.getActivatedAndEnabledClients(false, true).size());
         model.addAttribute("orderNotPaid", orderService.getAllNotPaid().size());
     }
 
@@ -35,7 +35,7 @@ public class CarController {
     public String deleteCar(@PathVariable("id") int id) {
         Car car = carService.getCarById(id);
         if (car != null) {
-            carService.deleteCar(car);
+            carService.delete(car);
         }
         return "redirect:/admin/car";
     }
@@ -43,11 +43,11 @@ public class CarController {
     @RequestMapping(value = "/admin/car", method = RequestMethod.GET)
     public String carIndex(Model model, @RequestParam(value = "view", required = false) String view) {
         model.addAttribute("allCount", carService.getAllCars().size());
-        model.addAttribute("enableCount", carService.getAllByEnabled(true).size());
-        model.addAttribute("disableCount", carService.getAllByEnabled(false).size());
-        model.addAttribute("openedCount", carService.getAllByOpened(true).size());
-        model.addAttribute("rentedCount", carService.getAllByRented(true).size());
-        model.addAttribute("offlineCount", carService.getAllByOnline(false).size());
+        model.addAttribute("enableCount", carService.getEnabledCars(true).size());
+        model.addAttribute("disableCount", carService.getEnabledCars(false).size());
+        model.addAttribute("openedCount", carService.getOpenedCars(true).size());
+        model.addAttribute("rentedCount", carService.getRentedCars(true).size());
+        model.addAttribute("offlineCount", carService.getOnlineCars(false).size());
         if (view == null) {
             model.addAttribute("cars", carService.getAllCars());
             return "admin/cars/index";
@@ -57,19 +57,19 @@ public class CarController {
                     model.addAttribute("cars", carService.getAllCars());
                     break;
                 case "enable":
-                    model.addAttribute("cars", carService.getAllByEnabled(true));
+                    model.addAttribute("cars", carService.getEnabledCars(true));
                     break;
                 case "disable":
-                    model.addAttribute("cars", carService.getAllByEnabled(false));
+                    model.addAttribute("cars", carService.getEnabledCars(false));
                     break;
                 case "opened":
-                    model.addAttribute("cars", carService.getAllByOpened(true));
+                    model.addAttribute("cars", carService.getOpenedCars(true));
                     break;
                 case "rented":
-                    model.addAttribute("cars", carService.getAllByRented(true));
+                    model.addAttribute("cars", carService.getRentedCars(true));
                     break;
                 case "offline":
-                    model.addAttribute("cars", carService.getAllByOnline(false));
+                    model.addAttribute("cars", carService.getOnlineCars(false));
                     break;
             }
         }
@@ -94,9 +94,9 @@ public class CarController {
     public String carIdControl(Model model, @PathVariable("id") int id) {
 
         Car car = carService.getCarById(id);
-        Tracker tracker = car.getTracker();
-        TrackerData trackerData = trackerDataService.getLastDataByTracker(tracker);
-        if (car.getNumber() != null) {
+        if (car != null) {
+            Tracker tracker = car.getTracker();
+            TrackerData trackerData = trackerDataService.getLastDataByTracker(tracker);
             model.addAttribute("car", car);
             model.addAttribute("tracker", tracker);
             model.addAttribute("tariff", car.getTariff());
@@ -112,7 +112,7 @@ public class CarController {
         Car car = carService.getCarById(id);
         if (car.getNumber() != null) {
             model.addAttribute("car", car);
-            model.addAttribute("orders", orderService.getAllByCar(car));
+            model.addAttribute("orders", orderService.getOrdersByCar(car));
 
             return "admin/cars/rent";
         } else return "redirect:/admin/car";
@@ -124,7 +124,7 @@ public class CarController {
                           @RequestParam("tariff") int tariffId) {
         car.setTracker(trackerService.getById(trackerId));
         car.setTariff(tariffService.getById(tariffId));
-        carService.saveCar(car);
+        carService.save(car);
         return "redirect:/admin/car/" + car.getId();
     }
 
@@ -149,7 +149,7 @@ public class CarController {
             car.setTracker(tracker);
             car.setRented(false);
             try {
-                carService.saveCar(car);
+                carService.save(car);
             } catch (Exception e) {
                 e.printStackTrace();
             }

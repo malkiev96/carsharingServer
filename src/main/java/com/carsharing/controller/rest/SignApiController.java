@@ -53,25 +53,25 @@ public class SignApiController {
     Client regClient(@RequestBody ClientReg clientReg, HttpServletResponse response) {
 
         if (clientReg != null) {
-            if (Pattern.checkTelNumber(clientReg.getTelephone()) &&
-                    Pattern.checkMail(clientReg.getMail()) &&
+            if (Pattern.checkPhone(clientReg.getTelephone()) &&
+                    Pattern.checkEmail(clientReg.getMail()) &&
                     Pattern.checkPassword(clientReg.getPassword())) {
                 if (clientService.getByTelephone(clientReg.getTelephone()) == null &&
-                        clientService.getByMail(clientReg.getMail()) == null) {
+                        clientService.getByEmail(clientReg.getMail()) == null) {
 
                     Client client = new Client();
                     client.setTelephone(clientReg.getTelephone());
-                    client.setMail(clientReg.getMail());
+                    client.setEmail(clientReg.getMail());
                     client.setPassword(bCryptPasswordEncoder.encode(clientReg.getPassword()));
                     client.setActivated(false);
                     client.setEnabled(true);
                     client.setToken(clientService.generateToken());
                     client.setRegistrationDate(new Date());
-                    client.setMiddlename(clientReg.getMiddlename());
-                    client.setFirstname(clientReg.getFirstname());
-                    client.setSecondname(clientReg.getSecondname());
+                    client.setMiddleName(clientReg.getMiddlename());
+                    client.setFirstName(clientReg.getFirstname());
+                    client.setSecondName(clientReg.getSecondname());
 
-                    clientService.saveClient(client);
+                    clientService.save(client);
                     client = clientService.getByTelephone(clientReg.getTelephone());
 
                     try {
@@ -109,11 +109,11 @@ public class SignApiController {
     String validClient(@RequestBody ClientReg clientReg, HttpServletResponse response) {
 
         if (clientReg != null) {
-            if (Pattern.checkTelNumber(clientReg.getTelephone()) &&
-                    Pattern.checkMail(clientReg.getMail()) &&
+            if (Pattern.checkPhone(clientReg.getTelephone()) &&
+                    Pattern.checkEmail(clientReg.getMail()) &&
                     Pattern.checkPassword(clientReg.getPassword())) {
                 if (clientService.getByTelephone(clientReg.getTelephone()) == null &&
-                        clientService.getByMail(clientReg.getMail()) == null) {
+                        clientService.getByEmail(clientReg.getMail()) == null) {
 
                     response.setStatus(HttpServletResponse.SC_OK);
                     return "OK";

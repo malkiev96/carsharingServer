@@ -1,39 +1,42 @@
 package com.carsharing.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
 @Table(name = "client", schema = "public")
 @Getter
 @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq_gen")
-    @SequenceGenerator(name = "client_seq_gen", sequenceName = "client_id_seq")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "firstname")
-    private String firstname;
+    @NotEmpty
+    private String firstName;
 
     @Column(name = "secondname")
-    private String secondname;
+    @NotEmpty
+    private String secondName;
 
     @Column(name = "middlename")
-    private String middlename;
+    @NotEmpty
+    private String middleName;
 
     @Column(name = "mail")
-    private String mail;
+    @Email
+    private String email;
 
     @Column(name = "gender")
+    @NotEmpty
     private String gender;
 
     @Column(name = "registration")
@@ -45,10 +48,12 @@ public class Client {
     private Date birthday;
 
     @Column(name = "telephone")
+    @NotEmpty
     private String telephone;
 
     @Column(name = "password")
     @JsonIgnore
+    @NotEmpty
     private String password;
 
     @Column(name = "activated", columnDefinition = "boolean default false")
@@ -66,6 +71,6 @@ public class Client {
 
     @Override
     public String toString() {
-        return secondname + " " + firstname + " " + middlename;
+        return secondName + " " + firstName + " " + middleName;
     }
 }

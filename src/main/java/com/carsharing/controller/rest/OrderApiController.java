@@ -134,7 +134,7 @@ public class OrderApiController {
 
         if (payInfo != null) {
 
-            Order order = orderService.getOrderById(payInfo.getOrderId());
+            Order order = orderService.getById(payInfo.getOrderId());
 
             if (order != null) {
                 Payment payment = new Payment();

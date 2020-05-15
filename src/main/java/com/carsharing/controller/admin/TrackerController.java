@@ -26,8 +26,8 @@ public class TrackerController {
     @ModelAttribute
     public void carCount(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-        model.addAttribute("carOffline", carService.getAllByOnline(false).size());
-        model.addAttribute("clientNew", clientService.getAllByActivatedAndEnabled(false, true).size());
+        model.addAttribute("carOffline", carService.getOnlineCars(false).size());
+        model.addAttribute("clientNew", clientService.getActivatedAndEnabledClients(false, true).size());
         model.addAttribute("orderNotPaid", orderService.getAllNotPaid().size());
     }
 

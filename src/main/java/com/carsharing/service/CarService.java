@@ -9,18 +9,31 @@ import java.util.List;
 
 public interface CarService {
 
-    List<Car> getAllByOnline(boolean online);
-    List<Car> getAllByOpened(boolean opened);
-    List<Car> getAllByRented(boolean rented);
-    TrackerData getActualData(Car car);
+    List<Car> getOnlineCars(boolean online);
+
+    List<Car> getOpenedCars(boolean opened);
+
+    List<Car> getRentedCars(boolean rented);
+
+    TrackerData getCurrentState(Car car);
+
     List<Car> getAllCars();
-    List<Car> getAllByEnabled(boolean enabled);
+
+    List<Car> getEnabledCars(boolean enabled);
+
     Car getCarById(int id);
+
     Car getCarByNumber(String number);
+
     AndroidCar getAndroidCarById(int id);
-    void saveCar(Car car);
-    void deleteCar(Car car);
+
+    void save(Car car);
+
+    void delete(Car car);
+
     boolean openCar(Car car);
+
     boolean closeCar(Car car);
+
     boolean testCarOnZone(Car car, Zone zone);
 }

@@ -11,5 +11,6 @@ import java.util.List;
 public interface OrderDataRepository extends JpaRepository<OrderData, Integer> {
 
     List<OrderData> findAllByOrder(Order order);
+
     OrderData findOrderDataByOrderAndEnded(Order order, boolean ended);
 }

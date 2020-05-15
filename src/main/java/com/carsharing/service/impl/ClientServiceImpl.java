@@ -5,6 +5,7 @@ import com.carsharing.model.android.LogPass;
 import com.carsharing.model.android.Token;
 import com.carsharing.repository.ClientRepository;
 import com.carsharing.service.ClientService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +19,16 @@ import java.security.SecureRandom;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
-
-    public List<Client> getAllByActivated(boolean activated) {
+    public List<Client> getActivatedClients(boolean activated) {
         return clientRepository.getAllByActivated(activated);
     }
 
-    public List<Client> getAllByEnabled(boolean enabled) {
+    public List<Client> getEnabledClients(boolean enabled) {
         return clientRepository.getAllByEnabled(enabled);
     }
 
@@ -38,12 +36,12 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findAll();
     }
 
-    public List<Client> getAllByActivatedAndEnabled(boolean activated, boolean enabled) {
+    public List<Client> getActivatedAndEnabledClients(boolean activated, boolean enabled) {
         return clientRepository.getAllByActivatedAndEnabled(activated, enabled);
     }
 
-    public Client getByMail(String mail) {
-        return clientRepository.getClientByMail(mail);
+    public Client getByEmail(String email) {
+        return clientRepository.getClientByEmail(email);
     }
 
     public Client getByTelephone(String telephone) {
@@ -54,21 +52,14 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.getOne(id);
     }
 
-    public void saveClient(Client client) {
+    public void save(Client client) {
         clientRepository.save(client);
-    }
-
-    public boolean tokenAuthentication(Token token) {
-        Client client = getById(token.getId());
-        if (client != null) return client.getToken().equals(token.getToken());
-        return false;
     }
 
     public String generateToken() {
         SecureRandom secureRandom = new SecureRandom();
         long longToken = Math.abs(secureRandom.nextLong());
-        String random = Long.toString(longToken, 16);
-        return random;
+        return Long.toString(longToken, 16);
     }
 
     public Client login(LogPass logPass) {
@@ -80,8 +71,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     public String saveImage(BufferedImage image, int clientId, String fileName) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
         String path = "C:/carsharing/client/" + clientId;
 
         File dir = new File(path);

@@ -12,10 +12,16 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findAllByEnded(boolean ended);
+
     List<Order> findAllByCar(Car car);
+
     List<Order> findAllByClient(Client client);
+
     Order findByClientAndEnded(Client client, boolean ended);
+
     List<Order> findAllByPaymentIsNullAndEnded(boolean ended);
+
     List<Order> findAllByPaymentIsNotNull();
+
     Order findByPaymentIsNullAndClientAndEndedIsTrue(Client client);
 }

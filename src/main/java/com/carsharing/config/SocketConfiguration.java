@@ -1,4 +1,4 @@
-package com.carsharing.configuration;
+package com.carsharing.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

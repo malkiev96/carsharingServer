@@ -6,21 +6,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "car", schema = "public")
 @Getter
 @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Car {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_seq_gen")
-    @SequenceGenerator(name = "car_seq_gen", sequenceName = "car_id_seq")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "number")
+    @NotEmpty
     private String number;
 
     @Column(name = "enabled")
@@ -32,28 +32,31 @@ public class Car {
     @Column(name = "rented")
     private Boolean rented;
 
-    @Column(name = "transmission")
-    private String transmission;
-
     @Column(name = "vin")
+    @NotEmpty
     private String vin;
 
     @Column(name = "year")
+    @NotEmpty
     private String year;
 
     @Column(name = "brand")
+    @NotEmpty
     private String brand;
 
     @Column(name = "model")
+    @NotEmpty
     private String model;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    @JoinColumn(name = "id_tracker", nullable = false)
+    @NotNull
+    @JoinColumn(name = "id_tracker")
     private Tracker tracker;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_tariff", nullable = false)
+    @JoinColumn(name = "id_tariff")
+    @NotNull
     private Tariff tariff;
 
     @Override

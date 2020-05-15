@@ -13,18 +13,18 @@ import java.util.Date;
 public class OrderData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderData_seq_gen")
-    @SequenceGenerator(name = "orderData_seq_gen", sequenceName = "orderData_id_seq")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "action")
     private int action;
 
     @Column(name = "timestampstart")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date start;
 
     @Column(name = "timestampend")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
     @Column(name = "ended")

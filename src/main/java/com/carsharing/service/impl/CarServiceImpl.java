@@ -11,6 +11,8 @@ import com.carsharing.service.TrackerDataService;
 import com.carsharing.service.TrackerService;
 import com.carsharing.service.polygon.Determinant;
 import com.carsharing.service.polygon.Points;
+import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -19,17 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CarServiceImpl implements CarService {
 
-    private CarRepository carRepository;
-    private TrackerService trackerService;
-    private TrackerDataService trackerDataService;
-
-    public CarServiceImpl(CarRepository carRepository, TrackerService trackerService, TrackerDataService trackerDataService) {
-        this.carRepository = carRepository;
-        this.trackerService = trackerService;
-        this.trackerDataService = trackerDataService;
-    }
+    private final CarRepository carRepository;
+    private final TrackerService trackerService;
+    private final TrackerDataService trackerDataService;
 
     public Car getCarById(int id) {
         return carRepository.getOne(id);
@@ -39,12 +36,11 @@ public class CarServiceImpl implements CarService {
         Car car = getCarById(id);
         AndroidCar androidCar = new AndroidCar();
         androidCar.setId(car.getId());
-        androidCar.setTransmission(car.getTransmission());
         androidCar.setNumber(car.getNumber());
         androidCar.setName(car.getBrand() + " " + car.getModel());
         androidCar.setTariff(car.getTariff());
         androidCar.setYear(car.getYear());
-        TrackerData data = getActualData(car);
+        TrackerData data = getCurrentState(car);
         if (data != null) {
             androidCar.setFuelLevel(data.getFuelLevel());
             androidCar.setLat(data.getLat());
@@ -57,69 +53,63 @@ public class CarServiceImpl implements CarService {
         return carRepository.getCarByNumber(number);
     }
 
-    public List<Car> getAllByOnline(boolean online) {
+    public List<Car> getOnlineCars(boolean online) {
         return carRepository.getAllByOnline(online);
     }
 
     @Override
-    public TrackerData getActualData(Car car) {
-        TrackerData data = trackerDataService.getLastDataByTracker(car.getTracker());
-        return data;
+    public TrackerData getCurrentState(Car car) {
+        return trackerDataService.getLastDataByTracker(car.getTracker());
     }
 
-    public List<Car> getAllByOpened(boolean opened) {
+    public List<Car> getOpenedCars(boolean opened) {
         List<Tracker> trackers = trackerService.getNotEmptyTrackers();
         List<Car> cars = new ArrayList<>();
         for (Tracker tracker : trackers) {
             TrackerData trackerData = trackerDataService.getLastDataByTracker(tracker);
             if (trackerData != null) {
-                if (trackerData.getOpened().equals(opened))
+                if (trackerData.getOpened().equals(opened)) {
                     cars.add(tracker.getCar());
+                }
             }
         }
         return cars;
     }
 
     @Override
-    public boolean openCar(Car car) {
-        if (car != null) {
-            Tracker tracker = car.getTracker();
+    public boolean openCar(@NotNull Car car) {
+        Tracker tracker = car.getTracker();
 
-            if (tracker.getAction() == 0) {
-                tracker.setAction(2);
-                trackerService.save(tracker);
-                TrackerData data = trackerDataService.getLastDataByTracker(tracker);
-                data.setOpened(true);
-                trackerDataService.save(data);
-            }
-
+        if (tracker.getAction() == 0) {
+            tracker.setAction(2);
+            trackerService.save(tracker);
+            TrackerData data = trackerDataService.getLastDataByTracker(tracker);
+            data.setOpened(true);
+            trackerDataService.save(data);
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     @Override
-    public boolean closeCar(Car car) {
-        if (car != null) {
-            Tracker tracker = car.getTracker();
-            if (tracker.getAction() == 0) {
-                tracker.setAction(1);
-                trackerService.save(tracker);
-                TrackerData data = trackerDataService.getLastDataByTracker(tracker);
-                data.setOpened(false);
-                trackerDataService.save(data);
-            }
+    public boolean closeCar(@NotNull Car car) {
+        Tracker tracker = car.getTracker();
+        if (tracker.getAction() == 0) {
+            tracker.setAction(1);
+            trackerService.save(tracker);
+            TrackerData data = trackerDataService.getLastDataByTracker(tracker);
+            data.setOpened(false);
+            trackerDataService.save(data);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
     public boolean testCarOnZone(Car car, Zone zone) {
 
-        TrackerData data = getActualData(car);
+        TrackerData data = getCurrentState(car);
         if (data != null && zone != null) {
 
             JSONArray array = new JSONArray(zone.getPolygon());
@@ -137,7 +127,7 @@ public class CarServiceImpl implements CarService {
         return false;
     }
 
-    public List<Car> getAllByRented(boolean rented) {
+    public List<Car> getRentedCars(boolean rented) {
         return carRepository.getAllByRented(rented);
     }
 
@@ -145,15 +135,15 @@ public class CarServiceImpl implements CarService {
         return carRepository.findAll();
     }
 
-    public List<Car> getAllByEnabled(boolean enabled) {
+    public List<Car> getEnabledCars(boolean enabled) {
         return carRepository.getAllByEnabled(enabled);
     }
 
-    public void saveCar(Car car) {
+    public void save(Car car) {
         carRepository.save(car);
     }
 
-    public void deleteCar(Car car) {
+    public void delete(Car car) {
         carRepository.delete(car);
     }
 }

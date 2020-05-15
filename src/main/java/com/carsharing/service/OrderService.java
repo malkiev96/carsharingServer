@@ -10,12 +10,11 @@ import java.util.List;
 
 public interface OrderService {
 
-    void saveOrder(Order order);
-    Order getOrderById(int id);
-    List<Order> getAllOrders();
-    List<Order> getAllByEnded(boolean ended);
-    List<Order> getAllByCar(Car car);
-    List<Order> getAllByClient(Client client);
+    void save(Order order);
+    Order getById(int id);
+    List<Order> getOrders();
+    List<Order> getEndedOrders(boolean ended);
+    List<Order> getOrdersByCar(Car car);
     boolean testBooking(int clientId, String carNumber);
     boolean testBooking(int clientId, int carId);
     AndroidOrder startAction(int clientId, int act);

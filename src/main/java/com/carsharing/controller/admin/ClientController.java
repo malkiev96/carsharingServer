@@ -35,14 +35,14 @@ public class ClientController {
     @ModelAttribute
     public void carCount(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-        model.addAttribute("carOffline", carService.getAllByOnline(false).size());
-        model.addAttribute("clientNew", clientService.getAllByActivatedAndEnabled(false, true).size());
+        model.addAttribute("carOffline", carService.getOnlineCars(false).size());
+        model.addAttribute("clientNew", clientService.getActivatedAndEnabledClients(false, true).size());
         model.addAttribute("orderNotPaid", orderService.getAllNotPaid().size());
     }
 
     @RequestMapping(value = "/admin/order/{id}/end", method = RequestMethod.GET)
     public String endOrder(@PathVariable("id") int id) {
-        Order order = orderService.getOrderById(id);
+        Order order = orderService.getById(id);
         orderService.finishOrder(order.getClient().getId());
 
         return "redirect:/admin/order/" + id;
@@ -51,9 +51,9 @@ public class ClientController {
     @RequestMapping(value = "/admin/client", method = RequestMethod.GET)
     public String index(Model model, @RequestParam(value = "v", required = false) String v) {
         model.addAttribute("allCount", clientService.getAllClients().size());
-        model.addAttribute("activatedCount", clientService.getAllByActivated(true).size());
-        model.addAttribute("notActivatedCount", clientService.getAllByActivatedAndEnabled(false, true).size());
-        model.addAttribute("bannedCount", clientService.getAllByEnabled(false).size());
+        model.addAttribute("activatedCount", clientService.getActivatedClients(true).size());
+        model.addAttribute("notActivatedCount", clientService.getActivatedAndEnabledClients(false, true).size());
+        model.addAttribute("bannedCount", clientService.getEnabledClients(false).size());
         if (v == null) {
             model.addAttribute("clients", clientService.getAllClients());
         } else {
@@ -62,13 +62,13 @@ public class ClientController {
                     model.addAttribute("clients", clientService.getAllClients());
                     break;
                 case "activated":
-                    model.addAttribute("clients", clientService.getAllByActivated(true));
+                    model.addAttribute("clients", clientService.getActivatedClients(true));
                     break;
                 case "notActivated":
-                    model.addAttribute("clients", clientService.getAllByActivatedAndEnabled(false, true));
+                    model.addAttribute("clients", clientService.getActivatedAndEnabledClients(false, true));
                     break;
                 case "banned":
-                    model.addAttribute("clients", clientService.getAllByEnabled(false));
+                    model.addAttribute("clients", clientService.getEnabledClients(false));
             }
         }
         return "admin/client/index";
@@ -77,18 +77,18 @@ public class ClientController {
     @RequestMapping(value = "/admin/order", method = RequestMethod.GET)
     public String orders(Model model, @RequestParam(value = "v", required = false) String v) {
 
-        model.addAttribute("allCount", orderService.getAllOrders().size());
+        model.addAttribute("allCount", orderService.getOrders().size());
         model.addAttribute("paidCount", orderService.getAllPaid().size());
         model.addAttribute("notPaidCount", orderService.getAllNotPaid().size());
-        model.addAttribute("endedCount", orderService.getAllByEnded(true).size());
-        model.addAttribute("notEndedCount", orderService.getAllByEnded(false).size());
+        model.addAttribute("endedCount", orderService.getEndedOrders(true).size());
+        model.addAttribute("notEndedCount", orderService.getEndedOrders(false).size());
 
         if (v == null) {
-            model.addAttribute("orders", orderService.getAllOrders());
+            model.addAttribute("orders", orderService.getOrders());
         } else {
             switch (v) {
                 case "all":
-                    model.addAttribute("orders", orderService.getAllOrders());
+                    model.addAttribute("orders", orderService.getOrders());
                     break;
                 case "paid":
                     model.addAttribute("orders", orderService.getAllPaid());
@@ -97,10 +97,10 @@ public class ClientController {
                     model.addAttribute("orders", orderService.getAllNotPaid());
                     break;
                 case "ended":
-                    model.addAttribute("orders", orderService.getAllByEnded(true));
+                    model.addAttribute("orders", orderService.getEndedOrders(true));
                     break;
                 case "notEnded":
-                    model.addAttribute("orders", orderService.getAllByEnded(false));
+                    model.addAttribute("orders", orderService.getEndedOrders(false));
                     break;
             }
         }
@@ -110,7 +110,7 @@ public class ClientController {
 
     @RequestMapping(value = "/admin/order/{id}", method = RequestMethod.GET)
     public String orderInfo(Model model, @PathVariable("id") int id) {
-        Order order = orderService.getOrderById(id);
+        Order order = orderService.getById(id);
         if (order != null) {
             model.addAttribute("order", order);
             model.addAttribute("data", order.getOrderData());
@@ -118,25 +118,6 @@ public class ClientController {
         } else return "redirect:/admin/order";
 
     }
-
-    @RequestMapping(value = "/admin/client/{id}/valid", method = RequestMethod.GET)
-    public String clientValid(Model model, @PathVariable("id") int id) {
-        Client client = clientService.getById(id);
-        if (client != null) {
-            model.addAttribute(client);
-            return "admin/client/valid";
-        } else return "redirect:/admin/client";
-    }
-
-    @RequestMapping(value = "/admin/client/{id}/rent", method = RequestMethod.GET)
-    public String clientRent(Model model, @PathVariable("id") int id) {
-        Client client = clientService.getById(id);
-        if (client != null) {
-            model.addAttribute(client);
-            return "admin/client/rent";
-        } else return "redirect:/admin/client";
-    }
-
 
     @RequestMapping(value = "/admin/client/{id}", method = RequestMethod.GET)
     public String clientId(Model model, @PathVariable("id") int id) {
@@ -152,10 +133,10 @@ public class ClientController {
                                  @RequestParam("birth") String birth) {
 
         Client cl = clientService.getById(client.getId());
-        cl.setMail(client.getMail());
-        cl.setFirstname(client.getFirstname());
-        cl.setSecondname(client.getSecondname());
-        cl.setMiddlename(client.getMiddlename());
+        cl.setEmail(client.getEmail());
+        cl.setFirstName(client.getFirstName());
+        cl.setSecondName(client.getSecondName());
+        cl.setMiddleName(client.getMiddleName());
         cl.setGender(client.getGender());
         if (birth != null) {
             try {
@@ -165,7 +146,7 @@ public class ClientController {
                 e.printStackTrace();
             }
         }
-        clientService.saveClient(cl);
+        clientService.save(cl);
 
         return "redirect:/admin/client/" + client.getId();
     }
@@ -200,7 +181,7 @@ public class ClientController {
         Client client = clientService.getById(id);
         if (client.getId() == id) {
             client.setActivated(true);
-            clientService.saveClient(client);
+            clientService.save(client);
         }
         return "redirect:/admin/client/" + id;
     }
@@ -210,7 +191,7 @@ public class ClientController {
         Client client = clientService.getById(id);
         if (client.getId() == id) {
             client.setEnabled(false);
-            clientService.saveClient(client);
+            clientService.save(client);
         }
         return "redirect:/admin/client/" + id;
     }
@@ -220,7 +201,7 @@ public class ClientController {
         Client client = clientService.getById(id);
         if (client.getId() == id) {
             client.setEnabled(true);
-            clientService.saveClient(client);
+            clientService.save(client);
         }
         return "redirect:/admin/client/" + id;
     }

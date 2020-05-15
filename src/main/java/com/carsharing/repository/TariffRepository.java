@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TariffRepository extends JpaRepository<Tariff, Integer> {
+
     List<Tariff> getAllByEnabled(boolean enabled);
 }

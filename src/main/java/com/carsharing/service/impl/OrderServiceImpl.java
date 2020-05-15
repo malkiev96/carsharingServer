@@ -32,28 +32,24 @@ public class OrderServiceImpl implements OrderService {
         this.paymentService = paymentService;
     }
 
-    public void saveOrder(Order order) {
+    public void save(Order order) {
         orderRepository.save(order);
     }
 
-    public Order getOrderById(int id) {
+    public Order getById(int id) {
         return setDataToOrder(orderRepository.getOne(id));
     }
 
-    public List<Order> getAllOrders() {
+    public List<Order> getOrders() {
         return setDataToList(orderRepository.findAll());
     }
 
-    public List<Order> getAllByEnded(boolean ended) {
+    public List<Order> getEndedOrders(boolean ended) {
         return setDataToList(orderRepository.findAllByEnded(ended));
     }
 
-    public List<Order> getAllByCar(Car car) {
+    public List<Order> getOrdersByCar(Car car) {
         return setDataToList(orderRepository.findAllByCar(car));
-    }
-
-    public List<Order> getAllByClient(Client client) {
-        return setDataToList(orderRepository.findAllByClient(client));
     }
 
     public boolean testBooking(int clientId, String carNumber) {
@@ -86,10 +82,10 @@ public class OrderServiceImpl implements OrderService {
             order.setPrice(0f);
             order.setBlocked(false);
             order.setEnded(false);
-            saveOrder(order);
+            save(order);
 
             car.setRented(true);
-            carService.saveCar(car);
+            carService.save(car);
 
             order = getCurrentOrderByClientID(clientId);
 
@@ -126,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
 
             Car car = order.getCar();
             car.setRented(false);
-            carService.saveCar(car);
+            carService.save(car);
 
             orderDataService.save(dataBooking);
 
@@ -134,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
             order.setEnd(dataBooking.getEnd());
             order.setBlocked(false);
 
-            saveOrder(order);
+            save(order);
 
             if (getPrice(order) == 0) {
                 Payment payment = new Payment();
@@ -171,7 +167,7 @@ public class OrderServiceImpl implements OrderService {
 
             Car car = order.getCar();
             car.setRented(false);
-            carService.saveCar(car);
+            carService.save(car);
 
             AndroidOrder androidOrder = new AndroidOrder();
             androidOrder.setClient(order.getClient());
@@ -184,7 +180,7 @@ public class OrderServiceImpl implements OrderService {
             order.setEnd(data.getEnd());
             order.setBlocked(false);
 
-            saveOrder(order);
+            save(order);
 
             return androidOrder;
         }

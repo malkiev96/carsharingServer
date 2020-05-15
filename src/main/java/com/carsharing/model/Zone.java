@@ -12,9 +12,7 @@ import javax.persistence.*;
 public class Zone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "zone_id_seq_gen")
-    @SequenceGenerator(name = "zone_id_seq_gen", sequenceName = "zone_id_seq")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "polygon", nullable = false)

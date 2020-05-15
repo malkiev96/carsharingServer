@@ -10,15 +10,15 @@ public class Pattern {
                 .matches();
     }
 
-    public static boolean checkTelNumber(String number) {
+    public static boolean checkPhone(String phone) {
         return compile("^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$")
-                .matcher(number)
+                .matcher(phone)
                 .matches();
     }
 
-    public static boolean checkMail(String mail) {
+    public static boolean checkEmail(String email) {
         return compile("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$")
-                .matcher(mail)
+                .matcher(email)
                 .matches();
     }
 

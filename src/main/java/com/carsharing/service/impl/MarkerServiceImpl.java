@@ -34,7 +34,6 @@ public class MarkerServiceImpl implements MarkerService {
             marker.setName(car.getBrand() + " " + car.getModel());
             marker.setVin(car.getVin());
             marker.setNumber(car.getNumber());
-            marker.setTransmission(car.getTransmission());
             marker.setYear(car.getYear());
             marker.setEnabled(car.getEnabled());
             marker.setRented(car.getRented());
@@ -82,7 +81,6 @@ public class MarkerServiceImpl implements MarkerService {
                     androidCar.setId(car.getId());
                     androidCar.setName(car.getBrand() + " " + car.getModel());
                     androidCar.setNumber(car.getNumber());
-                    androidCar.setTransmission(car.getTransmission());
                     androidCar.setYear(car.getYear());
                     androidCar.setFuelLevel(data.getFuelLevel());
                     androidCar.setLat(data.getLat());

@@ -2,144 +2,112 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>Трекеры - Панель Управления</title>
     <span th:replace="/fragments/head.html :: head"></span>
 </head>
 <body>
 
-<div id="wrap" >
+<div id="wrap">
 
-    <div th:replace="/fragments/header.html :: header"></div>
+    <div th:replace="/fragments/header"></div>
+    <div th:replace="/fragments/menu"></div>
 
-    <div id="left">
-        <div class="media user-media well-small">
-            <div class="media-body">
-                <h5 th:text="${username}" class="media-heading"></h5>
-                <ul class="list-unstyled user-info">
-                    <li><a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Администратор</li>
-                </ul>
-            </div>
-        </div>
-
-        <ul id="menu" class="collapse">
-
-            <li style="color: #787878; padding-left: 15px">Автомобили</li>
-
-            <li><a href="/admin/car"><i class="glyphicon glyphicon-th"></i>
-                <span class="label label-danger" th:if="${carOffline!=0}"  th:text="${carOffline}"></span> Автомобили </a></li>
-
-            <li><a href="/admin/map"><i class="glyphicon glyphicon-map-marker"></i> Карта </a></li>
-            <li><a href="/admin/zones"><i class="glyphicon glyphicon-record"></i> Зоны </a></li>
-            <li class="active"><a href="/admin/tracker"><i class="glyphicon glyphicon-globe"></i> Трекеры </a></li>
-            <li><a href="/admin/tariff"><i class="glyphicon glyphicon-tasks"></i> Тарифы </a></li>
-            <li style="color: #787878; padding-left: 15px">Клиенты</li>
-
-            <li><a href="/admin/client"><i class="glyphicon glyphicon-user"></i><span class="label label-info" th:if="${clientNew!=0}" th:text="${'+'+clientNew}"></span> Клиенты </a></li>
-            <li><a href="/admin/order"><i class="glyphicon glyphicon-shopping-cart"></i><span class="label label-danger" th:if="${orderNotPaid!=0}" th:text="${orderNotPaid}"></span> Аренды </a></li>
-        </ul>
-    </div>
-    <!--PAGE CONTENT -->
     <div id="content">
 
         <div class="inner">
-            <!--MAIN CONTENT -->
             <div class="row">
-                <div class="col-lg-12">
+                <button type="submit" id="save" style="display: none" class="btn btn-primary btn-sm">Сохранить</button>
+                <button type="button" class="btn btn-primary btn-sm" id="edit">Редактировать</button>
+                <button th:if="${tracker.car==null}" type="button" class="btn btn-danger btn-sm" id="del">Удалить
+                    трекер
+                </button>
+                <span th:if="${tracker.car!=null}">
+                    <a th:href="@{/admin/car/{id}(id=${tracker.car.id})}"
+                       class="btn btn-primary btn-sm" th:text="${tracker.car}"></a>
+                </span>
+                <button th:if="${tracker.online}" class="btn btn-success btn-sm">На связи</button>
+                <button th:if="${!tracker.online}" class="btn btn-danger btn-sm">Нет связи</button>
+            </div>
+        </div>
 
-                    <div class="box">
-                        <header th:text="${tracker.name}" class="panel-heading"></header>
-                        <div class="panel-body">
-                            <form th:action="@{/admin/tracker/edit}" th:object="${tracker}" method="post">
-
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <span th:if="${tracker.car!=null}">
-                                            <b>Автомобиль:</b>
-                                        <a th:href="@{/admin/car/{id}(id=${tracker.car.id})}"
-                                           class="btn btn-primary btn-xs" th:text="${tracker.car}"></a>
-                                        </span>
-                                        <b>Состояние: </b>
-                                        <button th:if="${tracker.online}" class="btn btn-success btn-xs">На связи</button>
-                                        <button th:if="${!tracker.online}" class="btn btn-danger btn-xs">Нет связи</button>
-                                    </div>
+        <div class="inner" style="padding: 10px">
+            <div class="card">
+                <div th:text="${tracker.name}" class="card-header"></div>
+                <div class="card-body">
+                    <form id="trackerEdit" th:action="@{/admin/tracker/edit}" th:object="${tracker}" method="post">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id">ID</label>
+                                    <input type="text" th:field="*{id}" readonly class="form-control" id="id">
                                 </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="id">ID</label>
-                                            <input type="text" th:field="*{id}" readonly class="form-control" id="id">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="name">Название</label>
-                                            <input type="text" th:field="*{name}" readonly class="form-control" id="name">
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="name">Название</label>
+                                    <input type="text" th:field="*{name}" readonly class="form-control" id="name">
                                 </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="imei">IMEI</label>
-                                            <input type="text" th:field="*{imei}" readonly class="form-control" id="imei">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="identify">Идентификационный номер</label>
-                                            <input type="text" th:field="*{identifyNumber}" readonly class="form-control" id="identify">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="phoneFirst">Номер, №1</label>
-                                            <input type="text" th:field="*{phoneFirst}" readonly class="form-control" id="phoneFirst">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="phoneSecond">Номер, №2</label>
-                                            <input type="text" th:field="*{phoneSecond}" readonly class="form-control" id="phoneSecond">
-                                            <input type="checkbox" th:field="*{online}" hidden>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="protocol">Протокол передачи</label>
-                                            <input type="text" th:field="*{protocol}" readonly class="form-control" id="protocol">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="enabled">Принимать данные</label>
-                                            <div class="make-switch switch-default" data-on-label="Да" data-off-label="Нет">
-                                                <input type="checkbox" disabled th:field="*{enabled}" id="enabled" th:value="*{enabled}"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span>
-                                    <button type="submit" id="save" style="display: none" class="btn btn-primary">Сохранить</button>
-                                    <button type="button" class="btn btn-primary" id="edit">Редактировать</button>
-                                    <button th:if="${tracker.car==null}" type="button" class="btn btn-danger" id="del">Удалить трекер</button>
-                                </span>
-                            </form>
-
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="imei">IMEI</label>
+                                    <input type="text" th:field="*{imei}" readonly class="form-control" id="imei">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="identify">Идентификационный номер</label>
+                                    <input type="text" th:field="*{identifyNumber}" readonly class="form-control"
+                                           id="identify">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="phoneFirst">Номер, №1</label>
+                                    <input type="text" th:field="*{phoneFirst}" readonly class="form-control"
+                                           id="phoneFirst">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="phoneSecond">Номер, №2</label>
+                                    <input type="text" th:field="*{phoneSecond}" readonly class="form-control"
+                                           id="phoneSecond">
+                                    <input type="checkbox" th:field="*{online}" hidden>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="protocol">Протокол передачи</label>
+                                    <input type="text" th:field="*{protocol}" readonly class="form-control"
+                                           id="protocol">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="enabled">Принимать данные</label>
+                                    <div class="make-switch switch-default" data-on-label="Да" data-off-label="Нет">
+                                        <input type="checkbox" disabled th:field="*{enabled}" id="enabled"
+                                               th:value="*{enabled}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
-            <!--END MAIN CONTENT -->
         </div>
     </div>
-    <!--END PAGE CONTENT -->
 </div>
 
 <form hidden id="deleteForm" method="post" th:action="@{/admin/tracker/{id}/delete(id=${tracker.id})}"></form>
@@ -148,25 +116,29 @@
 
 <script>
     $("#del").click(function () {
-        if (confirm("Подтвердите удаление трекера")){
+        if (confirm("Подтвердите удаление трекера")) {
             $("#deleteForm").submit();
         } else {
         }
     });
 
+    $("#save").click(function () {
+        $("#trackerEdit").submit();
+    });
+
     var edit = false;
     $('#edit').click(function () {
-        if (!edit){
+        if (!edit) {
             $('input').removeAttr('readonly');
             $('#enabled').removeAttr("disabled");
-            $('input[name=id]').attr('readonly',true);
+            $('input[name=id]').attr('readonly', true);
             $('#del').hide();
             $('#save').show();
             $(this).text("Отмена");
             $(this).removeClass("btn-primary");
             $(this).addClass("btn-default");
             edit = true;
-        }else {
+        } else {
             location.reload();
             edit = false;
         }

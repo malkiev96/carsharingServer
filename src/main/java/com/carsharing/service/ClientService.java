@@ -9,15 +9,14 @@ import java.util.List;
 
 public interface ClientService {
 
-    List<Client> getAllByActivated(boolean activated);
-    List<Client> getAllByEnabled(boolean enabled);
+    List<Client> getActivatedClients(boolean activated);
+    List<Client> getEnabledClients(boolean enabled);
     List<Client> getAllClients();
-    List<Client> getAllByActivatedAndEnabled(boolean activated, boolean enabled);
-    Client getByMail(String mail);
-    boolean tokenAuthentication(Token token);
+    List<Client> getActivatedAndEnabledClients(boolean activated, boolean enabled);
+    Client getByEmail(String mail);
     Client getByTelephone(String telephone);
     Client getById(int id);
-    void saveClient(Client client);
+    void save(Client client);
     Client login(LogPass logPass);
     String generateToken();
     String saveImage(BufferedImage image, int clientId, String name);

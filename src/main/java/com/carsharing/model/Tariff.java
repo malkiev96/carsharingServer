@@ -13,9 +13,7 @@ import java.sql.Time;
 public class Tariff {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tariff_seq_gen")
-    @SequenceGenerator(name = "tariff_seq_gen", sequenceName = "tariff_id_seq")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name", nullable = false)
